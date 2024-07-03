@@ -21,7 +21,7 @@
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
-    <ProjectGuid>{1e113ec0-747a-4846-bc2e-8edb975e913f}</ProjectGuid>
+    <ProjectGuid>{8a338413-508a-481f-b949-96ae8c5f11ad}</ProjectGuid>
     <RootNamespace>CoinKeeper</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
