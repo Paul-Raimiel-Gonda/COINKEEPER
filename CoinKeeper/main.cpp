@@ -2,7 +2,8 @@
 #include <string>
 #include <map>
 #include <vector>
-#include <set> 
+#include <set>
+#include <iomanip>
 
 using namespace std;
 
@@ -10,7 +11,7 @@ enum BudgetType { DAILY, WEEKLY, MONTHLY };
 
 class Budget {
 public:
-    Budget() : amount(0.0), type(DAILY) {} 
+    Budget() : amount(0.0), type(DAILY) {}
     Budget(double amount, BudgetType type)
         : amount(amount), type(type) {}
 
@@ -89,7 +90,7 @@ public:
             case WEEKLY: cout << "Weekly:" << endl; break;
             case MONTHLY: cout << "Monthly:" << endl; break;
             }
-            cout << "  - Amount: $" << entry.second.getAmount() << endl;
+            cout << "  - Amount: $" << fixed << setprecision(2) << entry.second.getAmount() << endl;
         }
     }
 
@@ -136,12 +137,40 @@ public:
             case WEEKLY: cout << "Weekly"; break;
             case MONTHLY: cout << "Monthly"; break;
             }
-            cout << " - Category: " << expense.getCategory() << ", Amount: $" << expense.getAmount() << endl;
+            cout << " - Category: " << expense.getCategory() << ", Amount: $" << fixed << setprecision(2) << expense.getAmount() << endl;
+        }
+    }
+
+    void listTotals() const {
+        map<BudgetType, double> totalExpenses;
+        for (const auto& expense : expenses) {
+            totalExpenses[expense.getType()] += expense.getAmount();
+        }
+
+        for (const auto& budgetEntry : budgets) {
+            BudgetType type = budgetEntry.first;
+            double budgetAmount = budgetEntry.second.getAmount();
+            double expenseAmount = totalExpenses[type];
+
+            cout << "\nTotals for ";
+            switch (type) {
+            case DAILY: cout << "Daily:" << endl; break;
+            case WEEKLY: cout << "Weekly:" << endl; break;
+            case MONTHLY: cout << "Monthly:" << endl; break;
+            }
+            cout << "  - Total Budget: $" << fixed << setprecision(2) << budgetAmount << endl;
+            cout << "  - Total Expenses: $" << fixed << setprecision(2) << expenseAmount << endl;
+
+            if (budgetAmount > expenseAmount) {
+                cout << "You have extra money for savings or other expenses." << endl;
+            }
+            else {
+                cout << "Warning: Your expenses are higher than your budget. Please use the financial advisor option." << endl;
+            }
         }
     }
 
 private:
-    //YUNG MGA INITIALIZED NA CATEGORIES PWEDE PA DAGDAGAN
     void initializeDefaultCategories() {
         categories = { "Food", "Transportation", "Electricity Bills", "Rent", "Entertainment" };
     }
@@ -292,10 +321,13 @@ void expenseMenu(User& user) {
 
 void userAccountMenu(User& user) {
     while (true) {
+        // Pwede pa mapaganda yung pag didisplay ng mga budget at expense (yung naka table)
+        //Tsaka yung mga category ng expense dapat kita din ng user para alam kung ano pipiliin
+        //nagana na naman code, need lang maging mas user friendly.
         cout << "\nUser Account Menu:" << endl;
-        cout << "1. Budget (yung pag didislplay pwede pa pagandahin)" << endl;
-        cout << "2. Expense (medyo magulo pa pre tsaka yung display pwede pa mapaganda)" << endl;
-        cout << "3. List Totals (wala pa)" << endl;
+        cout << "1. Budget" << endl;
+        cout << "2. Expense" << endl;
+        cout << "3. List Totals" << endl;
         cout << "4. Back to Main Menu" << endl;
         cout << "Choose an option: ";
         int choice;
@@ -311,7 +343,7 @@ void userAccountMenu(User& user) {
             expenseMenu(user);
             break;
         case 3:
-            cout << "List Totals option selected. (ala pa)" << endl;
+            user.listTotals();
             break;
         default:
             cout << "Invalid option. Please try again." << endl;
@@ -343,10 +375,10 @@ int main() {
             userAccountMenu(user);
             break;
         case 2:
-            cout << "Budget Allocation option selected. (di pa gawa)" << endl;
+            cout << "Budget Allocation option selected. (Wala pa ahaha)" << endl;
             break;
         case 3:
-            cout << "Financial Advisor option selected. (ala pa pre)" << endl;
+            cout << "Financial Advisor option selected. (ala pa rin)" << endl;
             break;
         default:
             cout << "Invalid option. Please try again." << endl;
