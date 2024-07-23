@@ -155,36 +155,40 @@ void startEndWeek(double& remainingWeeklyBudget, double& remainingMonthlyBudget,
     cout << "New week started with budget: " << remainingWeeklyBudget << endl;
 }
 
-void startEndMonth(double& remainingMonthlyBudget, double& savings, map<string, double>& dailyAllocations, map<string, double>& weeklyAllocations, map<string, double>& monthlyAllocations) {
+void startEndMonth(double& monthlyBudget, double& remainingMonthlyBudget, double& remainingWeeklyBudget, double& remainingDailyBudget, double& savings, map<string, double>& dailyAllocations, map<string, double>& weeklyAllocations, map<string, double>& monthlyAllocations) {
     double totalAllocations = 0.0;
 
     for (const auto& alloc : monthlyAllocations) {
         totalAllocations += alloc.second;
     }
 
-    savings += remainingMonthlyBudget;
-    remainingMonthlyBudget = 0.0;
-    cout << "Month ended. Remaining monthly budget added to savings." << endl;
+    if (remainingMonthlyBudget > 0) {
+        savings += remainingMonthlyBudget;
+        cout << "Month ended. Remaining monthly budget that was added to savings: " << remainingMonthlyBudget << endl;
+    }
 
     char addSavingsToBudget;
     cout << "Do you want to add your savings to the new monthly budget? (y/n): ";
     cin >> addSavingsToBudget;
-    if (addSavingsToBudget == 'y' || addSavingsToBudget == 'Y') {
-        cout << "Adding savings to the new monthly budget." << endl;
-    }
-    else {
-        cout << "Savings will not be added to the new monthly budget." << endl;
-        savings = 0.0;
-    }
 
-    double newMonthlyBudget;
+    double newMonthlyBudget = 0.0;
     cout << "Enter this month's budget: ";
     while (!(cin >> newMonthlyBudget) || newMonthlyBudget < 0) {
         cout << "Invalid input. Please enter a positive number for this month's budget: ";
         clearInput();
     }
-    remainingMonthlyBudget = newMonthlyBudget + savings;
-    savings = 0.0;
+
+    if (addSavingsToBudget == 'y' || addSavingsToBudget == 'Y') { // Added this block
+        cout << "Adding savings to the new monthly budget." << endl;
+        newMonthlyBudget += savings;
+    }
+    else {
+        cout << "Savings will not be added to the new monthly budget." << endl;
+    }
+
+    monthlyBudget = newMonthlyBudget;
+    savings = 0.0; // Reset savings after adding to budget
+
     for (auto& alloc : dailyAllocations) {
         alloc.second = 0.0;
     }
@@ -194,7 +198,11 @@ void startEndMonth(double& remainingMonthlyBudget, double& savings, map<string, 
     for (auto& alloc : monthlyAllocations) {
         alloc.second = 0.0;
     }
-    cout << "New month started with budget: " << remainingMonthlyBudget << endl;
+
+    cout << "New month started with budget: " << monthlyBudget << endl;
+    remainingMonthlyBudget = monthlyBudget;
+    remainingWeeklyBudget = monthlyBudget / 4;
+    remainingDailyBudget = monthlyBudget / 30;
 }
 
 void budgetManagement(double& monthlyBudget, double& remainingMonthlyBudget, double& remainingWeeklyBudget, double& remainingDailyBudget) {
@@ -419,7 +427,7 @@ void detailedAdvice() {
     cout << "Then 30% of your money goes to our favorite segment, our wants.\n"
         << "These include the thingswe desire and not necessarily what we\n"
         << "need. These include your favorite food from fancyrestaurants,\n"
-        << "high-end gadgets, and alike. Though it’s okay to spend a few\n"
+        << "high-end gadgets, and alike. Though itÂ’s okay to spend a few\n"
         << "luxuries every once in a while, your priority should still be the \n"
         << "portion for needs and savings. To better manage your income, one \n"
         << "should know the delineation of needs and wants.Then, you can keep\n"
@@ -589,7 +597,7 @@ int main() {
             startEndWeek(remainingWeeklyBudget, remainingMonthlyBudget, savings, weeklyAllocations);
             break;
         case 3:
-            startEndMonth(remainingMonthlyBudget, savings, dailyAllocations, weeklyAllocations, monthlyAllocations);
+            startEndMonth(monthlyBudget, remainingMonthlyBudget, remainingWeeklyBudget, remainingDailyBudget, savings, dailyAllocations, weeklyAllocations, monthlyAllocations);
             break;
         case 4:
             budgetManagement(monthlyBudget, remainingMonthlyBudget, remainingWeeklyBudget, remainingDailyBudget);
