@@ -123,6 +123,7 @@ void startEndDay(double& remainingDailyBudget, double& remainingWeeklyBudget, do
         cout << "Invalid input. Please enter a positive number for today's budget: ";
         clearInput();
     }
+    remainingWeeklyBudget -= remainingDailyBudget; // Deduct from weekly budget
     cout << "New day started with budget: " << remainingDailyBudget << endl;
 }
 
@@ -132,7 +133,6 @@ void startEndWeek(double& remainingWeeklyBudget, double& remainingMonthlyBudget,
     for (const auto& alloc : weeklyAllocations) {
         totalAllocations += alloc.second;
     }
-
 
     if (remainingWeeklyBudget > 0) {
         savings += remainingWeeklyBudget;
@@ -152,6 +152,7 @@ void startEndWeek(double& remainingWeeklyBudget, double& remainingMonthlyBudget,
         cout << "Invalid input. Please enter a positive number for this week's budget: ";
         clearInput();
     }
+    remainingMonthlyBudget -= remainingWeeklyBudget; // Deduct from monthly budget
     cout << "New week started with budget: " << remainingWeeklyBudget << endl;
 }
 
@@ -164,7 +165,7 @@ void startEndMonth(double& monthlyBudget, double& remainingMonthlyBudget, double
 
     if (remainingMonthlyBudget > 0) {
         savings += remainingMonthlyBudget;
-        cout << "Month ended. Remaining monthly budget that was added to savings: " << remainingMonthlyBudget << endl;
+        cout << "Month ended. Remaining monthly budget added to savings: " << remainingMonthlyBudget << endl;
     }
 
     char addSavingsToBudget;
@@ -178,7 +179,7 @@ void startEndMonth(double& monthlyBudget, double& remainingMonthlyBudget, double
         clearInput();
     }
 
-    if (addSavingsToBudget == 'y' || addSavingsToBudget == 'Y') { // Added this block
+    if (addSavingsToBudget == 'y' || addSavingsToBudget == 'Y') {
         cout << "Adding savings to the new monthly budget." << endl;
         newMonthlyBudget += savings;
     }
@@ -187,6 +188,9 @@ void startEndMonth(double& monthlyBudget, double& remainingMonthlyBudget, double
     }
 
     monthlyBudget = newMonthlyBudget;
+    remainingMonthlyBudget = monthlyBudget;
+    remainingWeeklyBudget = monthlyBudget / 4;
+    remainingDailyBudget = monthlyBudget / 30;
     savings = 0.0; // Reset savings after adding to budget
 
     for (auto& alloc : dailyAllocations) {
@@ -200,9 +204,6 @@ void startEndMonth(double& monthlyBudget, double& remainingMonthlyBudget, double
     }
 
     cout << "New month started with budget: " << monthlyBudget << endl;
-    remainingMonthlyBudget = monthlyBudget;
-    remainingWeeklyBudget = monthlyBudget / 4;
-    remainingDailyBudget = monthlyBudget / 30;
 }
 
 void budgetManagement(double& monthlyBudget, double& remainingMonthlyBudget, double& remainingWeeklyBudget, double& remainingDailyBudget) {
@@ -225,10 +226,12 @@ void budgetManagement(double& monthlyBudget, double& remainingMonthlyBudget, dou
     case 2:
         cout << "Enter new weekly budget: ";
         cin >> remainingWeeklyBudget;
+        remainingMonthlyBudget -= remainingWeeklyBudget; // Deduct from monthly budget
         break;
     case 3:
         cout << "Enter new daily budget: ";
         cin >> remainingDailyBudget;
+        remainingWeeklyBudget -= remainingDailyBudget; // Deduct from weekly budget
         break;
     default:
         cout << "Invalid choice." << endl;
@@ -544,6 +547,33 @@ void financialAdvice(double monthlyBudget, double remainingMonthlyBudget, double
     }
 }
 
+
+void setBudgetManually(double& monthlyBudget, double& remainingMonthlyBudget, double& remainingWeeklyBudget, double& remainingDailyBudget) {
+    cout << "Enter your monthly budget: ";
+    while (!(cin >> monthlyBudget) || monthlyBudget < 0) {
+        cout << "Invalid input. Please enter a positive number for the monthly budget: ";
+        clearInput();
+    }
+
+    cout << "Enter your weekly budget: ";
+    while (!(cin >> remainingWeeklyBudget) || remainingWeeklyBudget < 0) {
+        cout << "Invalid input. Please enter a positive number for the weekly budget: ";
+        clearInput();
+    }
+
+    cout << "Enter your daily budget: ";
+    while (!(cin >> remainingDailyBudget) || remainingDailyBudget < 0) {
+        cout << "Invalid input. Please enter a positive number for the daily budget: ";
+        clearInput();
+    }
+
+    remainingMonthlyBudget = monthlyBudget;
+    remainingWeeklyBudget = remainingWeeklyBudget;
+    remainingDailyBudget = remainingDailyBudget;
+    remainingMonthlyBudget -= remainingWeeklyBudget; // Deduct weekly budget from monthly
+    remainingWeeklyBudget -= remainingDailyBudget; // Deduct daily budget from weekly
+}
+
 int main() {
     string username;
     string date;
@@ -565,15 +595,32 @@ int main() {
     cout << "Enter the date (YYYY-MM-DD): ";
     getline(cin, date);
 
-    cout << "Enter your monthly budget/income: ";
+    cout << "Enter your total budget/income: ";
     while (!(cin >> monthlyBudget) || monthlyBudget < 0) {
         cout << "Invalid input. Please enter a positive number for the budget: ";
         clearInput();
     }
 
-    remainingMonthlyBudget = monthlyBudget;
-    remainingWeeklyBudget = monthlyBudget / 4;
-    remainingDailyBudget = monthlyBudget / 30;
+    cout << "Choose an option for budget allocation:\n";
+    cout << "1. Automate Budget Allocation\n";
+    cout << "2. Set Budget Manually\n";
+    cout << "Enter your choice (1/2): ";
+    int allocationChoice;
+    while (!(cin >> allocationChoice) || (allocationChoice != 1 && allocationChoice != 2)) {
+        cout << "Invalid choice. Please enter 1 or 2: ";
+        clearInput();
+    }
+
+    if (allocationChoice == 1) {
+        remainingMonthlyBudget = monthlyBudget;
+        remainingWeeklyBudget = monthlyBudget / 4;
+        remainingMonthlyBudget = remainingMonthlyBudget - remainingWeeklyBudget;
+        remainingDailyBudget = monthlyBudget / 30;
+        remainingWeeklyBudget = remainingWeeklyBudget - remainingDailyBudget;
+    }
+    else if (allocationChoice == 2) {
+        setBudgetManually(monthlyBudget, remainingMonthlyBudget, remainingWeeklyBudget, remainingDailyBudget);
+    }
 
     int choice = 0;
     while (choice != 8) {
@@ -606,33 +653,20 @@ int main() {
             expensesAllocations(remainingDailyBudget, remainingWeeklyBudget, remainingMonthlyBudget, dailyAllocations, weeklyAllocations, monthlyAllocations);
             break;
         case 6:
-            int subChoice;
-            cout << "1. Add Category\n2. Remove Category\nEnter your choice: ";
-            cin >> subChoice;
-            if (subChoice == 1) {
-                addExpenseCategory(dailyAllocations, weeklyAllocations, monthlyAllocations);
-            }
-            else if (subChoice == 2) {
-                removeExpenseCategory(dailyAllocations, weeklyAllocations, monthlyAllocations);
-            }
-            else {
-                cout << "Invalid choice.\n";
-            }
+            // Load categories from file
+            addExpenseCategory(dailyAllocations, weeklyAllocations, monthlyAllocations);
             break;
         case 7:
-            financialAdvice(monthlyBudget, remainingMonthlyBudget, remainingWeeklyBudget, remainingDailyBudget, savings);
+            saveCategories(dailyAllocations, weeklyAllocations, monthlyAllocations);
             break;
         case 8:
-            cout << "Exiting the program. Goodbye!\n";
+            cout << "Exiting program. Goodbye!" << endl;
             break;
         default:
-            cout << "Invalid choice. Please try again.\n";
+            cout << "Invalid choice. Please try again." << endl;
             break;
         }
     }
-
-    // Save categories to file
-    saveCategories(dailyAllocations, weeklyAllocations, monthlyAllocations);
 
     return 0;
 }
