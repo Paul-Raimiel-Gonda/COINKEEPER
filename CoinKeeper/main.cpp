@@ -91,19 +91,27 @@ void clearInput() {
 }
 
 void startEndDay(double& remainingDailyBudget, double& remainingWeeklyBudget, double& remainingMonthlyBudget, double& savings, map<string, double>& dailyAllocations) {
+    double totalAllocations = 0.0;
+
     for (const auto& alloc : dailyAllocations) {
+        totalAllocations += alloc.second;
         remainingDailyBudget -= alloc.second;
         remainingWeeklyBudget -= alloc.second;
         remainingMonthlyBudget -= alloc.second;
     }
+
     if (remainingDailyBudget > 0) {
         savings += remainingDailyBudget;
+        cout << "Day ended. Remaining daily budget added to savings: " << remainingDailyBudget << endl;
     }
+    else {
+        cout << "There is no savings for today." << endl;
+    }
+
     remainingDailyBudget = -1.0;
     for (auto& alloc : dailyAllocations) {
         alloc.second = 0.0;
     }
-    cout << "Day ended. Remaining daily budget added to savings." << endl;
 
     cout << "Enter today's budget: ";
     while (!(cin >> remainingDailyBudget) || remainingDailyBudget < 0) {
@@ -120,12 +128,16 @@ void startEndWeek(double& remainingWeeklyBudget, double& remainingMonthlyBudget,
     }
     if (remainingWeeklyBudget > 0) {
         savings += remainingWeeklyBudget;
+        cout << "Week ended. Remaining weekly budget added to savings: " << remainingWeeklyBudget << endl;
     }
+    else {
+        cout << "There is no savings for this week.";
+    }
+
     remainingWeeklyBudget = -1.0;
     for (auto& alloc : weeklyAllocations) {
         alloc.second = 0.0;
     }
-    cout << "Week ended. Remaining weekly budget added to savings." << endl;
 
     cout << "Enter this week's budget: ";
     while (!(cin >> remainingWeeklyBudget) || remainingWeeklyBudget < 0) {
@@ -380,7 +392,6 @@ void financialWarning(double remainingDailyBudget, double remainingWeeklyBudget,
     }
 }
 
-
 void financialAdvice(double remainingMonthlyBudget, double remainingWeeklyBudget, double remainingDailyBudget, double savings) {
     cout << "\nFinancial Advice:" << endl;
     if (remainingMonthlyBudget < 0) {
@@ -420,6 +431,9 @@ void financialAdvice(double remainingMonthlyBudget, double remainingWeeklyBudget
     else {
         cout << "- Try to save a portion of your income each month to build a financial cushion." << endl;
     }
+    cout << "\nPress Enter to return to the main menu...";
+    cin.ignore();
+    cin.get();
 }
 
 int main() {
@@ -453,14 +467,14 @@ int main() {
     remainingDailyBudget = monthlyBudget / 30;
 
     int choice = 0;
-    while (choice != 7) {
+    while (choice != 8) {
         displayStatus(username, date, monthlyBudget, remainingMonthlyBudget, remainingWeeklyBudget, remainingDailyBudget, savings);
         displayTable("Daily Expense Categories", dailyAllocations);
         displayTable("Weekly Expense Categories", weeklyAllocations);
         displayTable("Monthly Expense Categories", monthlyAllocations);
         displayMenu();
-        while (!(cin >> choice) || choice < 1 || choice > 7) {
-            cout << "Invalid choice. Please enter a number between 1 and 7: ";
+        while (!(cin >> choice) || choice < 1 || choice > 8) {
+            cout << "Invalid choice. Please enter a number between 1 and 8: ";
             clearInput();
         }
         switch (choice) {
