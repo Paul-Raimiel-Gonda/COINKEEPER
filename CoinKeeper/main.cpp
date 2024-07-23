@@ -69,7 +69,8 @@ void displayMenu() {
     cout << "4. Budget Management" << endl;
     cout << "5. Expenses/Allocations" << endl;
     cout << "6. Add/Remove Expense Category" << endl;
-    cout << "7. Exit" << endl;
+    cout << "7. Check Financial Guidance" << endl;
+    cout << "8. Exit" << endl;
     cout << "Enter your choice: ";
 }
 
@@ -363,6 +364,64 @@ void removeExpenseCategory(map<string, double>& dailyAllocations, map<string, do
     saveCategories(dailyAllocations, weeklyAllocations, monthlyAllocations);
 }
 
+void financialWarning(double remainingDailyBudget, double remainingWeeklyBudget, double remainingMonthlyBudget) {
+    double PercentOfDaily = remainingDailyBudget * 0.2;
+    double PercentOfWeekly = remainingWeeklyBudget * 0.2;
+    double PercentOfMonthly = remainingMonthlyBudget * 0.2;
+
+    if (remainingDailyBudget < PercentOfDaily) {
+        cout << "Warning: Your daily budget is running low. Consider reducing expenses or reallocating funds." << endl;
+    }
+    if (remainingWeeklyBudget < PercentOfWeekly) {
+        cout << "Warning: Your weekly budget is running low. Keep an eye on your expenses." << endl;
+    }
+    if (remainingMonthlyBudget < PercentOfMonthly) {
+        cout << "Warning: Your monthly budget is running low. Plan your expenses carefully." << endl;
+    }
+}
+
+
+void financialAdvice(double remainingMonthlyBudget, double remainingWeeklyBudget, double remainingDailyBudget, double savings) {
+    cout << "\nFinancial Advice:" << endl;
+    if (remainingMonthlyBudget < 0) {
+        cout << "- You have exceeded your monthly budget. Consider reducing discretionary expenses or finding ways to increase your income." << endl;
+    }
+    else if (remainingMonthlyBudget < 0.25 * remainingMonthlyBudget) {
+        cout << "- Your monthly budget is running low. Prioritize essential expenses and avoid unnecessary spending." << endl;
+    }
+    else {
+        cout << "- You are managing your monthly budget well. Continue monitoring your expenses and saving where possible." << endl;
+    }
+
+    if (remainingWeeklyBudget < 0) {
+        cout << "- You have exceeded your weekly budget. Try to limit spending for the rest of the week." << endl;
+    }
+    else if (remainingWeeklyBudget < 0.25 * remainingWeeklyBudget) {
+        cout << "- Your weekly budget is running low. Be cautious with your spending for the remainder of the week." << endl;
+    }
+    else {
+        cout << "- Your weekly budget is on track. Keep it up!" << endl;
+    }
+
+    if (remainingDailyBudget < 0) {
+        cout << "- You have exceeded your daily budget. Aim to reduce spending tomorrow." << endl;
+    }
+    else if (remainingDailyBudget < 0.25 * remainingDailyBudget) {
+        cout << "- Your daily budget is running low. Spend wisely for the rest of the day." << endl;
+    }
+    else {
+        cout << "- You are managing your daily budget well. Keep maintaining this control over your expenses." << endl;
+    }
+
+    cout << "\nSavings: " << fixed << setprecision(2) << savings << endl;
+    if (savings > 0) {
+        cout << "- Great job on saving! Consider investing your savings or keeping them for future unexpected expenses." << endl;
+    }
+    else {
+        cout << "- Try to save a portion of your income each month to build a financial cushion." << endl;
+    }
+}
+
 int main() {
     string username;
     string date;
@@ -407,18 +466,23 @@ int main() {
         switch (choice) {
         case 1:
             startEndDay(remainingDailyBudget, remainingWeeklyBudget, remainingMonthlyBudget, savings, dailyAllocations);
+            financialWarning(remainingDailyBudget, remainingWeeklyBudget, remainingMonthlyBudget);
             break;
         case 2:
             startEndWeek(remainingWeeklyBudget, remainingMonthlyBudget, savings, weeklyAllocations);
+            financialWarning(remainingDailyBudget, remainingWeeklyBudget, remainingMonthlyBudget);
             break;
         case 3:
             startEndMonth(remainingMonthlyBudget, savings, dailyAllocations, weeklyAllocations, monthlyAllocations);
+            financialWarning(remainingDailyBudget, remainingWeeklyBudget, remainingMonthlyBudget);
             break;
         case 4:
             budgetManagement(monthlyBudget, remainingMonthlyBudget, remainingWeeklyBudget, remainingDailyBudget);
+            financialWarning(remainingDailyBudget, remainingWeeklyBudget, remainingMonthlyBudget);
             break;
         case 5:
             expensesAllocations(dailyAllocations, weeklyAllocations, monthlyAllocations);
+            financialWarning(remainingDailyBudget, remainingWeeklyBudget, remainingMonthlyBudget);
             break;
         case 6:
             int subChoice;
@@ -435,6 +499,9 @@ int main() {
             }
             break;
         case 7:
+            financialAdvice(remainingMonthlyBudget, remainingWeeklyBudget, remainingDailyBudget, savings);
+            break;
+        case 8:
             cout << "Exiting the program. Goodbye!\n";
             break;
         default:
