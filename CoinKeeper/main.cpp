@@ -139,7 +139,7 @@ void startEndWeek(double& remainingWeeklyBudget, double& remainingMonthlyBudget,
         cout << "Week ended. Remaining weekly budget added to savings: " << remainingWeeklyBudget << endl;
     }
     else {
-        cout << "There is no savings for this week.";
+        cout << "There is no savings for this week." << endl;
     }
 
     remainingWeeklyBudget = -1.0;
