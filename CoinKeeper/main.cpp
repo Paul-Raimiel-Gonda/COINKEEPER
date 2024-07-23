@@ -91,19 +91,27 @@ void clearInput() {
 }
 
 void startEndDay(double& remainingDailyBudget, double& remainingWeeklyBudget, double& remainingMonthlyBudget, double& savings, map<string, double>& dailyAllocations) {
+    double totalAllocations = 0.0;
+
     for (const auto& alloc : dailyAllocations) {
+        totalAllocations += alloc.second;
         remainingDailyBudget -= alloc.second;
         remainingWeeklyBudget -= alloc.second;
         remainingMonthlyBudget -= alloc.second;
     }
+
     if (remainingDailyBudget > 0) {
         savings += remainingDailyBudget;
+        cout << "Day ended. Remaining daily budget added to savings: " << remainingDailyBudget << endl;
     }
+    else {
+        cout << "There is no savings for today." << endl;
+    }
+
     remainingDailyBudget = -1.0;
     for (auto& alloc : dailyAllocations) {
         alloc.second = 0.0;
     }
-    cout << "Day ended. Remaining daily budget added to savings." << endl;
 
     cout << "Enter today's budget: ";
     while (!(cin >> remainingDailyBudget) || remainingDailyBudget < 0) {
