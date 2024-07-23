@@ -105,10 +105,6 @@ void startEndDay(double& remainingDailyBudget, double& remainingWeeklyBudget, do
         totalAllocations += alloc.second;
     }
 
-    remainingDailyBudget -= totalAllocations;
-    remainingWeeklyBudget -= totalAllocations;
-    remainingMonthlyBudget -= totalAllocations;
-
     if (remainingDailyBudget > 0) {
         savings += remainingDailyBudget;
         cout << "Day ended. Remaining daily budget added to savings: " << remainingDailyBudget << endl;
@@ -137,8 +133,6 @@ void startEndWeek(double& remainingWeeklyBudget, double& remainingMonthlyBudget,
         totalAllocations += alloc.second;
     }
 
-    remainingWeeklyBudget -= totalAllocations;
-    remainingMonthlyBudget -= totalAllocations;
 
     if (remainingWeeklyBudget > 0) {
         savings += remainingWeeklyBudget;
@@ -168,7 +162,6 @@ void startEndMonth(double& remainingMonthlyBudget, double& savings, map<string, 
         totalAllocations += alloc.second;
     }
 
-    remainingMonthlyBudget -= totalAllocations;
     savings += remainingMonthlyBudget;
     remainingMonthlyBudget = 0.0;
     cout << "Month ended. Remaining monthly budget added to savings." << endl;
