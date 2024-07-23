@@ -74,14 +74,22 @@ void displayMenu() {
     cout << "Enter your choice: ";
 }
 
-void displayTable(const string& title, const map<string, double>& allocations) {
+void displayTable(const string& title, const map<string, double>& allocations, double remainingBudget) {
     cout << "\n" << title << endl;
     cout << "|-------------------------------|" << endl;
     cout << "|     Category     |  Amount    |" << endl;
     cout << "|-------------------------------|" << endl;
+
+    double totalExpenses = 0.0;
+
     for (const auto& alloc : allocations) {
         cout << "| " << setw(16) << left << alloc.first << " | " << setw(10) << right << fixed << setprecision(2) << alloc.second << " |" << endl;
+        totalExpenses += alloc.second;
     }
+
+    cout << "|-------------------------------|" << endl;
+    cout << "| Total Expenses   | " << setw(10) << right << fixed << setprecision(2) << totalExpenses << " |" << endl;
+    cout << "| Remaining Budget | " << setw(10) << right << fixed << setprecision(2) << remainingBudget << " |" << endl;
     cout << "|-------------------------------|" << endl << endl;
 }
 
@@ -95,9 +103,6 @@ void startEndDay(double& remainingDailyBudget, double& remainingWeeklyBudget, do
 
     for (const auto& alloc : dailyAllocations) {
         totalAllocations += alloc.second;
-        remainingDailyBudget -= alloc.second;
-        remainingWeeklyBudget -= alloc.second;
-        remainingMonthlyBudget -= alloc.second;
     }
 
     if (remainingDailyBudget > 0) {
@@ -122,16 +127,19 @@ void startEndDay(double& remainingDailyBudget, double& remainingWeeklyBudget, do
 }
 
 void startEndWeek(double& remainingWeeklyBudget, double& remainingMonthlyBudget, double& savings, map<string, double>& weeklyAllocations) {
+    double totalAllocations = 0.0;
+
     for (const auto& alloc : weeklyAllocations) {
-        remainingWeeklyBudget -= alloc.second;
-        remainingMonthlyBudget -= alloc.second;
+        totalAllocations += alloc.second;
     }
+
+
     if (remainingWeeklyBudget > 0) {
         savings += remainingWeeklyBudget;
         cout << "Week ended. Remaining weekly budget added to savings: " << remainingWeeklyBudget << endl;
     }
     else {
-        cout << "There is no savings for this week.";
+        cout << "There is no savings for this week." << endl;
     }
 
     remainingWeeklyBudget = -1.0;
@@ -148,9 +156,12 @@ void startEndWeek(double& remainingWeeklyBudget, double& remainingMonthlyBudget,
 }
 
 void startEndMonth(double& remainingMonthlyBudget, double& savings, map<string, double>& dailyAllocations, map<string, double>& weeklyAllocations, map<string, double>& monthlyAllocations) {
+    double totalAllocations = 0.0;
+
     for (const auto& alloc : monthlyAllocations) {
-        remainingMonthlyBudget -= alloc.second;
+        totalAllocations += alloc.second;
     }
+
     savings += remainingMonthlyBudget;
     remainingMonthlyBudget = 0.0;
     cout << "Month ended. Remaining monthly budget added to savings." << endl;
@@ -217,67 +228,77 @@ void budgetManagement(double& monthlyBudget, double& remainingMonthlyBudget, dou
     }
 }
 
-void expensesAllocations(map<string, double>& dailyAllocations, map<string, double>& weeklyAllocations, map<string, double>& monthlyAllocations) {
-    cout << "Expense Types: " << endl;
+void expensesAllocations(double& remainingDailyBudget, double& remainingWeeklyBudget, double& remainingMonthlyBudget, map<string, double>& dailyAllocations, map<string, double>& weeklyAllocations, map<string, double>& monthlyAllocations) {
+    int choice;
+    cout << "Expense Types:" << endl;
     cout << "1. Daily" << endl;
     cout << "2. Weekly" << endl;
     cout << "3. Monthly" << endl;
-
-    int type;
-    cout << "Enter expense type: ";
-    cin >> type;
+    cout << "Enter your choice: ";
+    cin >> choice;
 
     string category;
     double amount;
-    cout << "Enter category: ";
-    cin >> category;
-    cout << "Enter expense amount: ";
-    cin >> amount;
 
-    bool categoryExists = false;
-    switch (type) {
+    switch (choice) {
     case 1:
+        cout << "Enter expense category: ";
+        cin >> category;
+        cout << "Enter amount: ";
+        cin >> amount;
+
         if (dailyAllocations.find(category) != dailyAllocations.end()) {
-            categoryExists = true;
-        }
-        if (categoryExists) {
-            dailyAllocations[category] = amount;
+            dailyAllocations[category] += amount;
+            remainingDailyBudget -= amount;
+            remainingWeeklyBudget -= amount;
+            remainingMonthlyBudget -= amount;
+            if (remainingDailyBudget < 0) {
+                cout << "Warning: Daily budget exceeded!" << endl;
+            }
         }
         else {
-            cout << "Category does not exist." << endl;
-            return;
+            cout << "Category not found." << endl;
         }
         break;
     case 2:
+        cout << "Enter expense category: ";
+        cin >> category;
+        cout << "Enter amount: ";
+        cin >> amount;
+
         if (weeklyAllocations.find(category) != weeklyAllocations.end()) {
-            categoryExists = true;
-        }
-        if (categoryExists) {
-            weeklyAllocations[category] = amount;
+            weeklyAllocations[category] += amount;
+            remainingWeeklyBudget -= amount;
+            remainingMonthlyBudget -= amount;
+            if (remainingWeeklyBudget < 0) {
+                cout << "Warning: Weekly budget exceeded!" << endl;
+            }
         }
         else {
-            cout << "Category does not exist." << endl;
-            return;
+            cout << "Category not found." << endl;
         }
         break;
     case 3:
+        cout << "Enter expense category: ";
+        cin >> category;
+        cout << "Enter amount: ";
+        cin >> amount;
+
         if (monthlyAllocations.find(category) != monthlyAllocations.end()) {
-            categoryExists = true;
-        }
-        if (categoryExists) {
-            monthlyAllocations[category] = amount;
+            monthlyAllocations[category] += amount;
+            remainingMonthlyBudget -= amount;
+            if (remainingMonthlyBudget < 0) {
+                cout << "Warning: Monthly budget exceeded!" << endl;
+            }
         }
         else {
-            cout << "Category does not exist." << endl;
-            return;
+            cout << "Category not found." << endl;
         }
         break;
     default:
-        cout << "Invalid expense type." << endl;
-        return;
+        cout << "Invalid choice." << endl;
+        break;
     }
-
-    cout << "Expense added to category: " << category << endl;
 }
 
 void addExpenseCategory(map<string, double>& dailyAllocations, map<string, double>& weeklyAllocations, map<string, double>& monthlyAllocations) {
@@ -376,6 +397,44 @@ void removeExpenseCategory(map<string, double>& dailyAllocations, map<string, do
     saveCategories(dailyAllocations, weeklyAllocations, monthlyAllocations);
 }
 
+void detailedAdvice() {
+    cout << "\n\n               50 - 20 - 30 RULE FOR SAVING MONEY\n"
+        << "                 by  PHILIPPINE NATIONAL BANK\n"
+        << "--------------------------------------------------------------------\n\n"
+        << "50% of your money should be allocated for needs. This is the most \n"
+        << "important expense vertical that needs to be met. A 50% allocation \n"
+        << "is given to this because these are items/products/payables that \n"
+        << "enable us to go on with ourdaily lives.\n" << endl;
+
+    cout << "While 20% of your money is portioned for savings. It is never too \n"
+        << "early to start building up your savings funds. You may be hearing \n"
+        << "a lot about emergency funds as this is something that you must also \n"
+        << "prioritize to help you secure your future and keep you out of debt. \n"
+        << "Savings can also mean it is for money management such as savings \n"
+        << "for debit payments. This is a good tip that can help you avoid \n"
+        << "drowning in debt as well. Another way of saving could also be\n"
+        << "allocated for milestones such as retirement. But overall 20% of \n"
+        << "all your money shouldgo to these savings items/goals.\n" << endl;
+
+    cout << "Then 30% of your money goes to our favorite segment, our wants.\n"
+        << "These include the thingswe desire and not necessarily what we\n"
+        << "need. These include your favorite food from fancyrestaurants,\n"
+        << "high-end gadgets, and alike. Though it’s okay to spend a few\n"
+        << "luxuries every once in a while, your priority should still be the \n"
+        << "portion for needs and savings. To better manage your income, one \n"
+        << "should know the delineation of needs and wants.Then, you can keep\n"
+        << "track of your spending and more importantly where your money goes.\n" << endl;
+
+    cout << "If you want to be able to enjoy the most of your hard-earned money, \n"
+        << "this is the way to go.The big picture here is that this way of \n"
+        << "saving helps you to live within your means also prevents you from \n"
+        << "falling into a trap of overspending.\n" << endl;
+
+    cout << "\nPress Enter to return to the main menu...";
+    cin.ignore();
+    cin.get();
+}
+
 void financialAdvice(double remainingMonthlyBudget, double remainingWeeklyBudget, double remainingDailyBudget, double savings) {
     const double needsPercentage = 0.50;
     const double savingsPercentage = 0.20;
@@ -458,10 +517,23 @@ void financialAdvice(double remainingMonthlyBudget, double remainingWeeklyBudget
         cout << "- Try to save at least 20% of your monthly budget to build a financial cushion." << endl;
     }
 
-    cout << "\nPress Enter to return to the main menu...";
-    cin.ignore();
-    cin.get();
+    cout << "\nWould you like more details on your financial advice? (y/n): ";
+    char choice;
+    cin >> choice;
+
+    if (choice == 'y' || choice == 'Y') {
+        detailedAdvice();
+    }
+    else if (choice == 'n' || choice == 'N') {
+        cout << "\nReturning to the main menu..." << endl;
+        // Here you would typically call the main menu function or loop back as needed
+    }
+    else {
+        cout << "\nInvalid choice. Returning to the main menu..." << endl;
+        // Here you would typically call the main menu function or loop back as needed
+    }
 }
+
 
 int main() {
     string username;
@@ -475,6 +547,7 @@ int main() {
     map<string, double> weeklyAllocations;
     map<string, double> monthlyAllocations;
 
+    // Load categories from file
     loadCategories(dailyAllocations, weeklyAllocations, monthlyAllocations);
 
     cout << "Enter your username: ";
@@ -496,9 +569,12 @@ int main() {
     int choice = 0;
     while (choice != 8) {
         displayStatus(username, date, monthlyBudget, remainingMonthlyBudget, remainingWeeklyBudget, remainingDailyBudget, savings);
-        displayTable("Daily Expense Categories", dailyAllocations);
-        displayTable("Weekly Expense Categories", weeklyAllocations);
-        displayTable("Monthly Expense Categories", monthlyAllocations);
+
+        // Update the table display calls
+        displayTable("Daily Expense Categories", dailyAllocations, remainingDailyBudget);
+        displayTable("Weekly Expense Categories", weeklyAllocations, remainingWeeklyBudget);
+        displayTable("Monthly Expense Categories", monthlyAllocations, remainingMonthlyBudget);
+
         displayMenu();
         while (!(cin >> choice) || choice < 1 || choice > 8) {
             cout << "Invalid choice. Please enter a number between 1 and 8: ";
@@ -518,7 +594,7 @@ int main() {
             budgetManagement(monthlyBudget, remainingMonthlyBudget, remainingWeeklyBudget, remainingDailyBudget);
             break;
         case 5:
-            expensesAllocations(dailyAllocations, weeklyAllocations, monthlyAllocations);
+            expensesAllocations(remainingDailyBudget, remainingWeeklyBudget, remainingMonthlyBudget, dailyAllocations, weeklyAllocations, monthlyAllocations);
             break;
         case 6:
             int subChoice;
@@ -545,6 +621,9 @@ int main() {
             break;
         }
     }
+
+    // Save categories to file
+    saveCategories(dailyAllocations, weeklyAllocations, monthlyAllocations);
 
     return 0;
 }
