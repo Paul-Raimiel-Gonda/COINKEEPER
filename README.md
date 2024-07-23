@@ -1,5 +1,5 @@
 <p align = "center">
-  <img src = "logo.png" width = "600" height = "600" alt="LogoInsert"> 
+  <img src = "logo1.png" width = "750" height = "300" alt="LogoInsert"> 
 </p>
 
 # COIN KEEPER : Track, Save, Prosper (Financial Advisor)
