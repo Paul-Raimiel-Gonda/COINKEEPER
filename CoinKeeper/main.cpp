@@ -128,12 +128,16 @@ void startEndWeek(double& remainingWeeklyBudget, double& remainingMonthlyBudget,
     }
     if (remainingWeeklyBudget > 0) {
         savings += remainingWeeklyBudget;
+        cout << "Week ended. Remaining weekly budget added to savings: " << remainingWeeklyBudget << endl;
     }
+    else {
+        cout << "There is no savings for this week.";
+    }
+
     remainingWeeklyBudget = -1.0;
     for (auto& alloc : weeklyAllocations) {
         alloc.second = 0.0;
     }
-    cout << "Week ended. Remaining weekly budget added to savings." << endl;
 
     cout << "Enter this week's budget: ";
     while (!(cin >> remainingWeeklyBudget) || remainingWeeklyBudget < 0) {
