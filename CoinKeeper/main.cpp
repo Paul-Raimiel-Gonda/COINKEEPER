@@ -447,7 +447,6 @@ int main() {
     map<string, double> monthlyAllocations;
 
     loadCategories(dailyAllocations, weeklyAllocations, monthlyAllocations);
-    cout << "TRIAL FORKING";
 
     cout << "Enter your username: ";
     getline(cin, username);
