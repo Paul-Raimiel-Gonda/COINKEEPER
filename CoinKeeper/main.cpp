@@ -74,14 +74,22 @@ void displayMenu() {
     cout << "Enter your choice: ";
 }
 
-void displayTable(const string& title, const map<string, double>& allocations) {
+void displayTable(const string& title, const map<string, double>& allocations, double remainingBudget) {
     cout << "\n" << title << endl;
     cout << "|-------------------------------|" << endl;
     cout << "|     Category     |  Amount    |" << endl;
     cout << "|-------------------------------|" << endl;
+
+    double totalExpenses = 0.0;
+
     for (const auto& alloc : allocations) {
         cout << "| " << setw(16) << left << alloc.first << " | " << setw(10) << right << fixed << setprecision(2) << alloc.second << " |" << endl;
+        totalExpenses += alloc.second;
     }
+
+    cout << "|-------------------------------|" << endl;
+    cout << "| Total Expenses   | " << setw(10) << right << fixed << setprecision(2) << totalExpenses << " |" << endl;
+    cout << "| Remaining Budget | " << setw(10) << right << fixed << setprecision(2) << remainingBudget << " |" << endl;
     cout << "|-------------------------------|" << endl << endl;
 }
 
@@ -496,9 +504,12 @@ int main() {
     int choice = 0;
     while (choice != 8) {
         displayStatus(username, date, monthlyBudget, remainingMonthlyBudget, remainingWeeklyBudget, remainingDailyBudget, savings);
-        displayTable("Daily Expense Categories", dailyAllocations);
-        displayTable("Weekly Expense Categories", weeklyAllocations);
-        displayTable("Monthly Expense Categories", monthlyAllocations);
+
+        // Update the table display calls
+        displayTable("Daily Expense Categories", dailyAllocations, remainingDailyBudget);
+        displayTable("Weekly Expense Categories", weeklyAllocations, remainingWeeklyBudget);
+        displayTable("Monthly Expense Categories", monthlyAllocations, remainingMonthlyBudget);
+
         displayMenu();
         while (!(cin >> choice) || choice < 1 || choice > 8) {
             cout << "Invalid choice. Please enter a number between 1 and 8: ";
