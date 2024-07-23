@@ -2,7 +2,7 @@
   <img src = "logo.png" width = "600" height = "600" alt="LogoInsert"> 
 </p>
 
-# COIN KEEPER : Track, Save, Prosper (Personal Financial Advisor)
+# COIN KEEPER : Track, Save, Prosper (Financial Advisor)
 <br> The Personal Finance Manager is a console-based application developed in C++ that assists individuals in efficiently managing their personal finances. This software enables users to monitor their income and expenditures, delivering valuable insights into their spending patterns and proposing savings strategies. By supporting users in budgeting, saving, and making wise decisions, this tool contributes to Sustainable Development Goal 8, which aims to foster sustained, inclusive economic growth and decent work for everyone. 
 
 <br>
