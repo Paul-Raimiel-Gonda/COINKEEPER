@@ -261,8 +261,6 @@ void expensesAllocations(double& remainingDailyBudget, double& remainingWeeklyBu
         if (dailyAllocations.find(category) != dailyAllocations.end()) {
             dailyAllocations[category] += amount;
             remainingDailyBudget -= amount;
-            remainingWeeklyBudget -= amount;
-            remainingMonthlyBudget -= amount;
             if (remainingDailyBudget < 0) {
                 cout << "Warning: Daily budget exceeded!" << endl;
             }
@@ -280,7 +278,6 @@ void expensesAllocations(double& remainingDailyBudget, double& remainingWeeklyBu
         if (weeklyAllocations.find(category) != weeklyAllocations.end()) {
             weeklyAllocations[category] += amount;
             remainingWeeklyBudget -= amount;
-            remainingMonthlyBudget -= amount;
             if (remainingWeeklyBudget < 0) {
                 cout << "Warning: Weekly budget exceeded!" << endl;
             }
@@ -470,7 +467,7 @@ void financialAdvice(double monthlyBudget, double remainingMonthlyBudget, double
 
     switch (periodChoice) {
     case '1':
-        savingsGoal = (monthlyBudget / 30)  * (savingsPercentage / 100.0);
+        savingsGoal = (monthlyBudget / 30) * (savingsPercentage / 100.0);
         break;
     case '2':
         savingsGoal = (monthlyBudget / 4) * (savingsPercentage / 100.0);
@@ -485,7 +482,7 @@ void financialAdvice(double monthlyBudget, double remainingMonthlyBudget, double
 
     cout << "\nFinancial Status:" << endl;
 
- 
+
     switch (periodChoice) {
     case '1':
         cout << "\nDaily Budget:" << endl;
