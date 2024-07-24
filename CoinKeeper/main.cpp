@@ -106,11 +106,19 @@ void startEndDay(double& remainingDailyBudget, double& remainingWeeklyBudget, do
     }
 
     if (remainingDailyBudget > 0) {
-        savings += remainingDailyBudget;
-        cout << "Day ended. Remaining daily budget added to savings: " << remainingDailyBudget << endl;
-    }
-    else {
-        cout << "There is no savings for today." << endl;
+        char choice;
+        cout << "Day ended. Remaining daily budget: " << remainingDailyBudget << endl;
+        cout << "Do you want to add the remaining daily budget to savings or return it to the weekly budget? (s/r): ";
+        cin >> choice;
+
+        if (choice == 's' || choice == 'S') {
+            savings += remainingDailyBudget;
+            cout << "Added to savings." << endl;
+        }
+        else if (choice == 'r' || choice == 'R') {
+            remainingWeeklyBudget += remainingDailyBudget;
+            cout << "Returned to weekly budget." << endl;
+        }
     }
 
     remainingDailyBudget = -1.0;
@@ -135,11 +143,19 @@ void startEndWeek(double& remainingWeeklyBudget, double& remainingMonthlyBudget,
     }
 
     if (remainingWeeklyBudget > 0) {
-        savings += remainingWeeklyBudget;
-        cout << "Week ended. Remaining weekly budget added to savings: " << remainingWeeklyBudget << endl;
-    }
-    else {
-        cout << "There is no savings for this week." << endl;
+        char choice;
+        cout << "Week ended. Remaining weekly budget: " << remainingWeeklyBudget << endl;
+        cout << "Do you want to add the remaining weekly budget to savings or return it to the monthly budget? (s/r): ";
+        cin >> choice;
+
+        if (choice == 's' || choice == 'S') {
+            savings += remainingWeeklyBudget;
+            cout << "Added to savings." << endl;
+        }
+        else if (choice == 'r' || choice == 'R') {
+            remainingMonthlyBudget += remainingWeeklyBudget;
+            cout << "Returned to monthly budget." << endl;
+        }
     }
 
     remainingWeeklyBudget = -1.0;
@@ -164,8 +180,15 @@ void startEndMonth(double& monthlyBudget, double& remainingMonthlyBudget, double
     }
 
     if (remainingMonthlyBudget > 0) {
-        savings += remainingMonthlyBudget;
-        cout << "Month ended. Remaining monthly budget added to savings: " << remainingMonthlyBudget << endl;
+        char choice;
+        cout << "Month ended. Remaining monthly budget: " << remainingMonthlyBudget << endl;
+        cout << "Do you want to add the remaining monthly budget to savings? (y/n): ";
+        cin >> choice;
+
+        if (choice == 'y' || choice == 'Y') {
+            savings += remainingMonthlyBudget;
+            cout << "Added to savings." << endl;
+        }
     }
 
     char addSavingsToBudget;
