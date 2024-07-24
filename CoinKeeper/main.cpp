@@ -69,7 +69,7 @@ void displayMenu() {
     cout << "4. Budget Management" << endl;
     cout << "5. Expenses/Allocations" << endl;
     cout << "6. Add/Remove Expense Category" << endl;
-    cout << "7. Check Saving Status" << endl;
+    cout << "7. Financial Advice" << endl;
     cout << "8. Exit" << endl;
     cout << "Enter your choice: ";
 }
@@ -679,7 +679,7 @@ int main() {
             addExpenseCategory(dailyAllocations, weeklyAllocations, monthlyAllocations);
             break;
         case 7:
-            saveCategories(dailyAllocations, weeklyAllocations, monthlyAllocations);
+            financialAdvice(monthlyBudget, remainingDailyBudget, remainingMonthlyBudget, remainingWeeklyBudget, savings);
             break;
         case 8:
             cout << "Exiting program. Goodbye!" << endl;
