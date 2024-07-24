@@ -213,7 +213,9 @@ void startEndMonth(double& monthlyBudget, double& remainingMonthlyBudget, double
     monthlyBudget = newMonthlyBudget;
     remainingMonthlyBudget = monthlyBudget;
     remainingWeeklyBudget = monthlyBudget / 4;
+    remainingMonthlyBudget = monthlyBudget - remainingWeeklyBudget;
     remainingDailyBudget = monthlyBudget / 30;
+    remainingWeeklyBudget = remainingWeeklyBudget - remainingDailyBudget;
     savings = 0.0; // Reset savings after adding to budget
 
     for (auto& alloc : dailyAllocations) {
