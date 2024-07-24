@@ -64,8 +64,8 @@ void displayStatus(const string& username, const string& date, double monthlyBud
 void displayMenu() {
     cout << "MAIN MENU:" << endl;
     cout << "1. End/Start Day" << endl;
-    cout << "2. End/Start Week (DI PA MAAYOS)" << endl;
-    cout << "3. End/Start Month (DI PA MAAAYOS)" << endl;
+    cout << "2. End/Start Week" << endl;
+    cout << "3. End/Start Month" << endl;
     cout << "4. Budget Management" << endl;
     cout << "5. Expenses/Allocations" << endl;
     cout << "6. Add/Remove Expense Category" << endl;
