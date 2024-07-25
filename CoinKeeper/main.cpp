@@ -66,7 +66,7 @@ void displayStatus(const string& username, double monthlyBudget, double remainin
     cout << "| Savings:            " << setw(10) << right << fixed << setprecision(2) << savings << " |" << endl;
     cout << "----------------------------------" << endl;
     cout << endl;
-    }
+}
 
 void displayMenu() {
     cout << "\n\n-------------------------------------- M  A  I  N    M  E  N  U ---------------------------------------" << endl << endl;
@@ -677,6 +677,105 @@ void setBudgetManually(double& monthlyBudget, double& remainingMonthlyBudget, do
     remainingWeeklyBudget -= remainingDailyBudget; // Deduct daily budget from weekly
 }
 
+void modifySavings(double& remainingDailyBudget, double& remainingWeeklyBudget, double& remainingMonthlyBudget, double& savings) {
+    int choice;
+    cout << "Modify Savings:" << endl;
+    cout << "1. Add to Savings" << endl;
+    cout << "2. Withdraw from Savings" << endl;
+    cout << "Enter your choice: ";
+    cin >> choice;
+
+    if (choice == 1) {
+        cout << "Add to Savings from:" << endl;
+        cout << "1. Daily Budget" << endl;
+        cout << "2. Weekly Budget" << endl;
+        cout << "3. Monthly Budget" << endl;
+        cout << "Enter your choice: ";
+        int fromChoice;
+        cin >> fromChoice;
+
+        double amount;
+        cout << "Enter amount to add to savings: ";
+        cin >> amount;
+
+        switch (fromChoice) {
+        case 1:
+            if (amount <= remainingDailyBudget) {
+                remainingDailyBudget -= amount;
+                savings += amount;
+                cout << "Added " << amount << " to savings from daily budget." << endl;
+            }
+            else {
+                cout << "Insufficient funds in daily budget." << endl;
+            }
+            break;
+        case 2:
+            if (amount <= remainingWeeklyBudget) {
+                remainingWeeklyBudget -= amount;
+                savings += amount;
+                cout << "Added " << amount << " to savings from weekly budget." << endl;
+            }
+            else {
+                cout << "Insufficient funds in weekly budget." << endl;
+            }
+            break;
+        case 3:
+            if (amount <= remainingMonthlyBudget) {
+                remainingMonthlyBudget -= amount;
+                savings += amount;
+                cout << "Added " << amount << " to savings from monthly budget." << endl;
+            }
+            else {
+                cout << "Insufficient funds in monthly budget." << endl;
+            }
+            break;
+        default:
+            cout << "Invalid choice." << endl;
+        }
+    }
+    else if (choice == 2) {
+        cout << "Withdraw from Savings to:" << endl;
+        cout << "1. Daily Budget" << endl;
+        cout << "2. Weekly Budget" << endl;
+        cout << "3. Monthly Budget" << endl;
+        cout << "Enter your choice: ";
+        int toChoice;
+        cin >> toChoice;
+
+        double amount;
+        cout << "Enter amount to withdraw from savings: ";
+        cin >> amount;
+
+        if (amount <= savings) {
+            switch (toChoice) {
+            case 1:
+                remainingDailyBudget += amount;
+                savings -= amount;
+                cout << "Withdrew " << amount << " from savings to daily budget." << endl;
+                break;
+            case 2:
+                remainingWeeklyBudget += amount;
+                savings -= amount;
+                cout << "Withdrew " << amount << " from savings to weekly budget." << endl;
+                break;
+            case 3:
+                remainingMonthlyBudget += amount;
+                savings -= amount;
+                cout << "Withdrew " << amount << " from savings to monthly budget." << endl;
+                break;
+            default:
+                cout << "Invalid choice." << endl;
+            }
+        }
+        else {
+            cout << "Insufficient funds in savings." << endl;
+        }
+    }
+    else {
+        cout << "Invalid choice." << endl;
+    }
+}
+
 int main() {
     string username;
     double monthlyBudget = 0.0;
@@ -722,15 +821,15 @@ int main() {
     }
 
     int choice = 0;
-    while (choice != 8) {
+    while (choice != 9) {
         displayStatus(username, monthlyBudget, remainingMonthlyBudget, remainingWeeklyBudget, remainingDailyBudget, savings);
 
         // Update the table display calls
         displayTable("Budget Allocations:", dailyAllocations, remainingDailyBudget, weeklyAllocations, remainingWeeklyBudget, monthlyAllocations, remainingMonthlyBudget);
 
         displayMenu();
-        while (!(cin >> choice) || choice < 1 || choice > 8) {
-            cout << "Invalid choice. Please enter a number between 1 and 8: ";
+        while (!(cin >> choice) || choice < 1 || choice > 9) {
+            cout << "Invalid choice. Please enter a number between 1 and 9: ";
             clearInput();
         }
         switch (choice) {
@@ -767,6 +866,9 @@ int main() {
             financialAdvice(monthlyBudget, remainingDailyBudget, remainingMonthlyBudget, remainingWeeklyBudget, savings);
             break;
         case 8:
+            modifySavings(remainingDailyBudget, remainingWeeklyBudget, remainingMonthlyBudget, savings);
+            break;
+        case 9:
             cout << "Exiting program. Goodbye!" << endl;
             break;
         default:
