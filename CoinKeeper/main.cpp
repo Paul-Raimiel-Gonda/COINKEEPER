@@ -284,8 +284,14 @@ void startEndMonth(double& monthlyBudget, double& remainingMonthlyBudget, double
     if (remainingMonthlyBudget > 0) {
         char choice;
         cout << "Month ended. Remaining monthly budget: " << remainingMonthlyBudget << endl;
-        cout << "Do you want to add the remaining monthly budget to savings? (y/n): ";
-        cin >> choice;
+        do {
+            cout << "Do you want to add the remaining monthly budget to savings? (y/n): ";
+            cin >> choice;
+            if (choice != 'y' && choice != 'Y' && choice != 'n' && choice != 'N') {
+                cout << "Invalid input. Please enter 'y' or 'n'." << endl;
+                clearInput();
+            }
+        } while (choice != 'y' && choice != 'Y' && choice != 'n' && choice != 'N');
 
         if (choice == 'y' || choice == 'Y') {
             savings += remainingMonthlyBudget;
@@ -306,15 +312,21 @@ void startEndMonth(double& monthlyBudget, double& remainingMonthlyBudget, double
     }
 
     if (allocationChoice == 1) {
-
         cout << "Enter your total Monthly Budget: ";
         while (!(cin >> newMonthlyBudget) || newMonthlyBudget < 0) {
             cout << "Invalid input. Please enter a positive number for the budget: ";
             clearInput();
         }
         char addSavingsToBudget;
-        cout << "Do you want to add your savings to the new monthly budget? (y/n): ";
-        cin >> addSavingsToBudget;
+        do {
+            cout << "Do you want to add your savings to the new monthly budget? (y/n): ";
+            cin >> addSavingsToBudget;
+            if (addSavingsToBudget != 'y' && addSavingsToBudget != 'Y' && addSavingsToBudget != 'n' && addSavingsToBudget != 'N') {
+                cout << "Invalid input. Please enter 'y' or 'n'." << endl;
+                clearInput();
+            }
+        } while (addSavingsToBudget != 'y' && addSavingsToBudget != 'Y' && addSavingsToBudget != 'n' && addSavingsToBudget != 'N');
+
         if (addSavingsToBudget == 'y' || addSavingsToBudget == 'Y') {
             cout << "Adding savings to the new monthly budget." << endl;
             newMonthlyBudget += savings;
@@ -337,8 +349,15 @@ void startEndMonth(double& monthlyBudget, double& remainingMonthlyBudget, double
             clearInput();
         }
         char addSavingsToBudget;
-        cout << "Do you want to add your savings to the new monthly budget? (y/n): ";
-        cin >> addSavingsToBudget;
+        do {
+            cout << "Do you want to add your savings to the new monthly budget? (y/n): ";
+            cin >> addSavingsToBudget;
+            if (addSavingsToBudget != 'y' && addSavingsToBudget != 'Y' && addSavingsToBudget != 'n' && addSavingsToBudget != 'N') {
+                cout << "Invalid input. Please enter 'y' or 'n'." << endl;
+                clearInput();
+            }
+        } while (addSavingsToBudget != 'y' && addSavingsToBudget != 'Y' && addSavingsToBudget != 'n' && addSavingsToBudget != 'N');
+
         if (addSavingsToBudget == 'y' || addSavingsToBudget == 'Y') {
             cout << "Adding savings to the new monthly budget." << endl;
             newMonthlyBudget += savings;
@@ -363,6 +382,7 @@ void startEndMonth(double& monthlyBudget, double& remainingMonthlyBudget, double
         remainingMonthlyBudget -= remainingWeeklyBudget;
         remainingWeeklyBudget -= remainingDailyBudget;
     }
+
     for (auto& alloc : dailyAllocations) {
         alloc.second = 0.0;
     }
@@ -382,7 +402,7 @@ void startEndMonth(double& monthlyBudget, double& remainingMonthlyBudget, double
 void budgetManagement(double& monthlyBudget, double& remainingMonthlyBudget, double& remainingWeeklyBudget, double& remainingDailyBudget) {
     int choice;
     cout << "Budget Management:" << endl;
-    cout << "1. Modify Monthly Budget" << endl;
+    cout << "1. Modify Total Monthly Budget" << endl;
     cout << "2. Modify Weekly Budget" << endl;
     cout << "3. Modify Daily Budget" << endl;
     cout << "Enter your choice: ";
