@@ -58,13 +58,13 @@ void displayStatus(const string& username, double monthlyBudget, double remainin
     cout << "                             \\____\\___/|_|_| |_|_|\\_\\___|\\___| ___/ \\___ |_| " << endl;
     cout << "                                                             |_| " << endl;
     cout << "\nUser: " << username << endl;
-    cout << "----------------------------------" << endl;
-    cout << "| Total Budget:       " << setw(10) << right << fixed << setprecision(2) << monthlyBudget << " |" << endl;
-    cout << "| Monthly Budget:     " << setw(10) << right << fixed << setprecision(2) << remainingMonthlyBudget << " |" << endl;
-    cout << "| Weekly Budget:      " << setw(10) << right << fixed << setprecision(2) << remainingWeeklyBudget << " |" << endl;
-    cout << "| Daily Budget:       " << setw(10) << right << fixed << setprecision(2) << remainingDailyBudget << " |" << endl;
-    cout << "| Savings:            " << setw(10) << right << fixed << setprecision(2) << savings << " |" << endl;
-    cout << "----------------------------------" << endl;
+    cout << "--------------------------------------------" << endl;
+    cout << "| Total Monthly Budget:         " << setw(10) << right << fixed << setprecision(2) << monthlyBudget << " |" << endl;
+    cout << "| Remaining Monthly Budget:     " << setw(10) << right << fixed << setprecision(2) << remainingMonthlyBudget << " |" << endl;
+    cout << "| Remaining Weekly Budget:      " << setw(10) << right << fixed << setprecision(2) << remainingWeeklyBudget << " |" << endl;
+    cout << "| Remaining Daily Budget:       " << setw(10) << right << fixed << setprecision(2) << remainingDailyBudget << " |" << endl;
+    cout << "| Savings:                      " << setw(10) << right << fixed << setprecision(2) << savings << " |" << endl;
+    cout << "--------------------------------------------" << endl;
     cout << endl;
 }
 
@@ -192,6 +192,9 @@ void startEndDay(double& remainingDailyBudget, double& remainingWeeklyBudget, do
     remainingDailyBudget = newDailyBudget;
     remainingWeeklyBudget -= newDailyBudget; // Deduct new daily budget from weekly budget
     cout << "New day started with budget: " << remainingDailyBudget << endl;
+    cout << "\nPress Enter to return to the main menu...\n";
+    cin.ignore();
+    cin.get();
 }
 
 void startEndWeek(double& remainingWeeklyBudget, double& remainingMonthlyBudget, double& savings, map<string, double>& weeklyAllocations) {
@@ -232,6 +235,9 @@ void startEndWeek(double& remainingWeeklyBudget, double& remainingMonthlyBudget,
     remainingWeeklyBudget = newWeeklyBudget;
     remainingMonthlyBudget -= newWeeklyBudget; // Deduct new weekly budget from monthly budget
     cout << "New week started with budget: " << remainingWeeklyBudget << endl;
+    cout << "\nPress Enter to return to the main menu...";
+    cin.ignore();
+    cin.get();
 }
 
 void startEndMonth(double& monthlyBudget, double& remainingMonthlyBudget, double& remainingWeeklyBudget, double& remainingDailyBudget, double& savings, map<string, double>& dailyAllocations, map<string, double>& weeklyAllocations, map<string, double>& monthlyAllocations) {
@@ -291,6 +297,9 @@ void startEndMonth(double& monthlyBudget, double& remainingMonthlyBudget, double
     }
 
     cout << "New month started with budget: " << monthlyBudget << endl;
+    cout << "\nPress Enter to return to the main menu...";
+    cin.ignore();
+    cin.get();
 }
 
 void budgetManagement(double& monthlyBudget, double& remainingMonthlyBudget, double& remainingWeeklyBudget, double& remainingDailyBudget) {
@@ -332,6 +341,9 @@ void budgetManagement(double& monthlyBudget, double& remainingMonthlyBudget, dou
         break;
     default:
         cout << "Invalid choice." << endl;
+        cout << "\nPress Enter to return to the main menu...";
+        cin.ignore();
+        cin.get();
         break;
     }
 }
@@ -360,10 +372,16 @@ void expensesAllocations(double& remainingDailyBudget, double& remainingWeeklyBu
             remainingDailyBudget -= amount;
             if (remainingDailyBudget < 0) {
                 cout << "Warning: Daily budget exceeded!" << endl;
+                cout << "\nPress Enter to return to the main menu...";
+                cin.ignore();
+                cin.get();
             }
         }
         else {
             cout << "Category not found." << endl;
+            cout << "\nPress Enter to return to the main menu...";
+            cin.ignore();
+            cin.get();
         }
         break;
     case 2:
@@ -377,10 +395,16 @@ void expensesAllocations(double& remainingDailyBudget, double& remainingWeeklyBu
             remainingWeeklyBudget -= amount;
             if (remainingWeeklyBudget < 0) {
                 cout << "Warning: Weekly budget exceeded!" << endl;
+                cout << "\nPress Enter to return to the main menu...";
+                cin.ignore();
+                cin.get();
             }
         }
         else {
             cout << "Category not found." << endl;
+            cout << "\nPress Enter to return to the main menu...";
+            cin.ignore();
+            cin.get();
         }
         break;
     case 3:
@@ -394,14 +418,23 @@ void expensesAllocations(double& remainingDailyBudget, double& remainingWeeklyBu
             remainingMonthlyBudget -= amount;
             if (remainingMonthlyBudget < 0) {
                 cout << "Warning: Monthly budget exceeded!" << endl;
+                cout << "\nPress Enter to return to the main menu...";
+                cin.ignore();
+                cin.get();
             }
         }
         else {
             cout << "Category not found." << endl;
+            cout << "\nPress Enter to return to the main menu...";
+            cin.ignore();
+            cin.get();
         }
         break;
     default:
         cout << "Invalid choice." << endl;
+        cout << "\nPress Enter to return to the main menu...";
+        cin.ignore();
+        cin.get();
         break;
     }
 }
@@ -425,31 +458,52 @@ void addExpenseCategory(map<string, double>& dailyAllocations, map<string, doubl
         if (dailyAllocations.find(category) == dailyAllocations.end()) {
             dailyAllocations[category] = 0.0;
             cout << "Category added: " << category << endl;
+            cout << "\nPress Enter to return to the main menu...";
+            cin.ignore();
+            cin.get();
         }
         else {
             cout << "Category already exists." << endl;
+            cout << "\nPress Enter to return to the main menu...";
+            cin.ignore();
+            cin.get();
         }
         break;
     case 2:
         if (weeklyAllocations.find(category) == weeklyAllocations.end()) {
             weeklyAllocations[category] = 0.0;
             cout << "Category added: " << category << endl;
+            cout << "\nPress Enter to return to the main menu...";
+            cin.ignore();
+            cin.get();
         }
         else {
             cout << "Category already exists." << endl;
+            cout << "\nPress Enter to return to the main menu...";
+            cin.ignore();
+            cin.get();
         }
         break;
     case 3:
         if (monthlyAllocations.find(category) == monthlyAllocations.end()) {
             monthlyAllocations[category] = 0.0;
             cout << "Category added: " << category << endl;
+            cout << "\nPress Enter to return to the main menu...";
+            cin.ignore();
+            cin.get();
         }
         else {
             cout << "Category already exists." << endl;
+            cout << "\nPress Enter to return to the main menu...";
+            cin.ignore();
+            cin.get();
         }
         break;
     default:
         cout << "Invalid expense type." << endl;
+        cout << "\nPress Enter to return to the main menu...";
+        cin.ignore();
+        cin.get();
         return;
     }
 
@@ -489,14 +543,23 @@ void removeExpenseCategory(map<string, double>& dailyAllocations, map<string, do
         break;
     default:
         cout << "Invalid expense type." << endl;
+        cout << "\nPress Enter to return to the main menu...";
+        cin.ignore();
+        cin.get();
         return;
     }
 
     if (categoryExists) {
         cout << "Category removed: " << category << endl;
+        cout << "\nPress Enter to return to the main menu...";
+        cin.ignore();
+        cin.get();
     }
     else {
         cout << "Category does not exist." << endl;
+        cout << "\nPress Enter to return to the main menu...";
+        cin.ignore();
+        cin.get();
     }
 
     saveCategories(dailyAllocations, weeklyAllocations, monthlyAllocations);
@@ -646,7 +709,10 @@ void financialAdvice(double monthlyBudget, double remainingMonthlyBudget, double
         cout << "\nReturning to the main menu..." << endl;
     }
     else {
-        cout << "\nInvalid choice. Returning to the main menu..." << endl;
+        cout << "\nInvalid choice." << endl;
+        cout << "\nPress Enter to return to the main menu...";
+        cin.ignore();
+        cin.get();
     }
 }
 
@@ -707,6 +773,9 @@ void modifySavings(double& remainingDailyBudget, double& remainingWeeklyBudget, 
             }
             else {
                 cout << "Insufficient funds in daily budget." << endl;
+                cout << "\nPress Enter to return to the main menu...";
+                cin.ignore();
+                cin.get();
             }
             break;
         case 2:
@@ -717,6 +786,9 @@ void modifySavings(double& remainingDailyBudget, double& remainingWeeklyBudget, 
             }
             else {
                 cout << "Insufficient funds in weekly budget." << endl;
+                cout << "\nPress Enter to return to the main menu...";
+                cin.ignore();
+                cin.get();
             }
             break;
         case 3:
@@ -727,10 +799,16 @@ void modifySavings(double& remainingDailyBudget, double& remainingWeeklyBudget, 
             }
             else {
                 cout << "Insufficient funds in monthly budget." << endl;
+                cout << "\nPress Enter to return to the main menu...";
+                cin.ignore();
+                cin.get();
             }
             break;
         default:
             cout << "Invalid choice." << endl;
+            cout << "\nPress Enter to return to the main menu...";
+            cin.ignore();
+            cin.get();
         }
     }
     else if (choice == 2) {
@@ -769,10 +847,16 @@ void modifySavings(double& remainingDailyBudget, double& remainingWeeklyBudget, 
         }
         else {
             cout << "Insufficient funds in savings." << endl;
+            cout << "\nPress Enter to return to the main menu...";
+            cin.ignore();
+            cin.get();
         }
     }
     else {
         cout << "Invalid choice." << endl;
+        cout << "\nPress Enter to return to the main menu...";
+        cin.ignore();
+        cin.get();
     }
 }
 
@@ -860,6 +944,9 @@ int main() {
             }
             else {
                 cout << "Invalid choice.\n";
+                cout << "\nPress Enter to return to the main menu...";
+                cin.ignore();
+                cin.get();
             }
             break;
         case 7:
@@ -872,7 +959,10 @@ int main() {
             cout << "Exiting program. Goodbye!" << endl;
             break;
         default:
-            cout << "Invalid choice. Please try again." << endl;
+            cout << "Invalid choice." << endl;
+            cout << "\nPress Enter to return to the main menu...";
+            cin.ignore();
+            cin.get();
             break;
         }
     }
