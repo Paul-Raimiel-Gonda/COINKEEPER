@@ -2,6 +2,7 @@
 #include <iomanip>
 #include <string>
 #include <map>
+#include <vector>
 #include <fstream>
 #include <limits>
 
@@ -79,8 +80,8 @@ void displayMenu() {
 }
 
 void displayTable(const string& title, const map<string, double>& dailyAllocations, double remainingDailyBudget,
-    const map<string, double>& weeklyAllocations, double remainingWeeklyBudget,
-    const map<string, double>& monthlyAllocations, double remainingMonthlyBudget) {
+                  const map<string, double>& weeklyAllocations, double remainingWeeklyBudget,
+                  const map<string, double>& monthlyAllocations, double remainingMonthlyBudget) {
     cout << title << endl;
 
     cout << "Daily Budget Allocations           Weekly Budget Allocations          Monthly Budget Allocations" << endl;
@@ -97,8 +98,7 @@ void displayTable(const string& title, const map<string, double>& dailyAllocatio
         if (dailyIt != dailyAllocations.end()) {
             cout << "| " << setw(16) << left << dailyIt->first << " | " << setw(10) << right << fixed << setprecision(2) << dailyIt->second << " |";
             dailyIt++;
-        }
-        else {
+        } else {
             cout << "|                             |            |";
         }
 
@@ -106,8 +106,7 @@ void displayTable(const string& title, const map<string, double>& dailyAllocatio
         if (weeklyIt != weeklyAllocations.end()) {
             cout << "  | " << setw(16) << left << weeklyIt->first << " | " << setw(10) << right << fixed << setprecision(2) << weeklyIt->second << " |";
             weeklyIt++;
-        }
-        else {
+        } else {
             cout << "  |                             |            |";
         }
 
@@ -115,8 +114,7 @@ void displayTable(const string& title, const map<string, double>& dailyAllocatio
         if (monthlyIt != monthlyAllocations.end()) {
             cout << "  | " << setw(16) << left << monthlyIt->first << " | " << setw(10) << right << fixed << setprecision(2) << monthlyIt->second << " |" << endl;
             monthlyIt++;
-        }
-        else {
+        } else {
             cout << "  |                             |            |" << endl;
         }
     }
@@ -393,7 +391,8 @@ void budgetManagement(double& monthlyBudget, double& remainingMonthlyBudget, dou
     }
 }
 
-void expensesAllocations(double& remainingDailyBudget, double& remainingWeeklyBudget, double& remainingMonthlyBudget, map<string, double>& dailyAllocations, map<string, double>& weeklyAllocations, map<string, double>& monthlyAllocations) {
+void expensesAllocations(double& remainingDailyBudget, double& remainingWeeklyBudget, double& remainingMonthlyBudget,
+                         map<string, double>& dailyAllocations, map<string, double>& weeklyAllocations, map<string, double>& monthlyAllocations) {
     int choice;
     cout << "Expense Types:" << endl;
     cout << "1. Daily" << endl;
@@ -402,107 +401,97 @@ void expensesAllocations(double& remainingDailyBudget, double& remainingWeeklyBu
     cout << "Enter your choice: ";
     cin >> choice;
 
+    vector<string> categories;
     string category;
     double amount;
 
     switch (choice) {
-    case 1:
-        cout << "Enter expense category: ";
-        cin >> category;
-        cout << "Enter amount: ";
-        cin >> amount;
-
-        if (amount > remainingDailyBudget) {
-            cout << "Expense amount cannot exceed set Daily Budget.\n";
-            cout << "If you wish to add to your Daily Budget, modify the Daily Budget first.\n";
-            cout << "\nPress Enter to return to the main menu...";
-            cin.ignore();
-            cin.get();
+        case 1:
+            for (const auto& alloc : dailyAllocations) {
+                categories.push_back(alloc.first);
             }
-        else if (dailyAllocations.find(category) != dailyAllocations.end()) {
-            dailyAllocations[category] += amount;
-            remainingDailyBudget -= amount;
-        }
-        else if (remainingDailyBudget = 0) {
-            cout << "Warning: No Daily Budget Remaining!" << endl;
+            break;
+        case 2:
+            for (const auto& alloc : weeklyAllocations) {
+                categories.push_back(alloc.first);
+            }
+            break;
+        case 3:
+            for (const auto& alloc : monthlyAllocations) {
+                categories.push_back(alloc.first);
+            }
+            break;
+        default:
+            cout << "Invalid choice." << endl;
             cout << "\nPress Enter to return to the main menu...";
             cin.ignore();
             cin.get();
-        }
-        else {
-            cout << "Category not found." << endl;
-            cout << "\nPress Enter to return to the main menu...";
-            cin.ignore();
-            cin.get();
-        }
-        break;
-    case 2:
-        cout << "Enter expense category: ";
-        cin >> category;
-        cout << "Enter amount: ";
-        cin >> amount;
+            return;
+    }
 
-        if (amount > remainingWeeklyBudget) {
-            cout << "Expense amount cannot exceed set Weekly Budget.\n";
-            cout << "If you wish to add to your Weekly Budget, modify the Weekly Budget first.\n";
-            cout << "\nPress Enter to return to the main menu...";
-            cin.ignore();
-            cin.get();
-        }
-        else if (weeklyAllocations.find(category) != weeklyAllocations.end()) {
-            weeklyAllocations[category] += amount;
-            remainingWeeklyBudget -= amount;
-        }
-        else if (remainingWeeklyBudget = 0) {
-            cout << "Warning: No Weekly Budget Remaining!" << endl;
-            cout << "\nPress Enter to return to the main menu...";
-            cin.ignore();
-            cin.get();
-        }
-        else {
-            cout << "Category not found." << endl;
-            cout << "\nPress Enter to return to the main menu...";
-            cin.ignore();
-            cin.get();
-        }
-        break;
-    case 3:
-        cout << "Enter expense category: ";
-        cin >> category;
-        cout << "Enter amount: ";
-        cin >> amount;
+    cout << "Select a category by number:" << endl;
+    for (size_t i = 0; i < categories.size(); ++i) {
+        cout << i + 1 << ". " << categories[i] << endl;
+    }
 
-        if (amount > remainingMonthlyBudget) {
-            cout << "Expense amount cannot exceed set Monthly Budget.\n";
-            cout << "If you wish to add to your Monthly Budget, modify the Monthly Budget first.\n";
-            cout << "\nPress Enter to return to the main menu...";
-            cin.ignore();
-            cin.get();
-        }
-        else if (monthlyAllocations.find(category) != monthlyAllocations.end()) {
-            monthlyAllocations[category] += amount;
-            remainingMonthlyBudget -= amount;
-        }
-        else if (remainingMonthlyBudget = 0) {
-            cout << "Warning: No Monthly Budget Remaining!" << endl;
-            cout << "\nPress Enter to return to the main menu...";
-            cin.ignore();
-            cin.get();
-        }
-        else {
-            cout << "Category not found." << endl;
-            cout << "\nPress Enter to return to the main menu...";
-            cin.ignore();
-            cin.get();
-        }
-        break;
-    default:
-        cout << "Invalid choice." << endl;
+    int categoryIndex;
+    cout << "Enter category number: ";
+    cin >> categoryIndex;
+
+    if (categoryIndex < 1 || categoryIndex > categories.size()) {
+        cout << "Invalid category number." << endl;
         cout << "\nPress Enter to return to the main menu...";
         cin.ignore();
         cin.get();
-        break;
+        return;
     }
+
+    category = categories[categoryIndex - 1];
+    cout << "Enter amount: ";
+    cin >> amount;
+
+    switch (choice) {
+        case 1:
+            if (amount > remainingDailyBudget) {
+                cout << "Expense amount cannot exceed set Daily Budget.\n";
+                cout << "If you wish to add to your Daily Budget, modify the Daily Budget first.\n";
+            } else if (remainingDailyBudget == 0) {
+                cout << "Warning: No Daily Budget Remaining!" << endl;
+            } else {
+                dailyAllocations[category] += amount;
+                remainingDailyBudget -= amount;
+            }
+            break;
+        case 2:
+            if (amount > remainingWeeklyBudget) {
+                cout << "Expense amount cannot exceed set Weekly Budget.\n";
+                cout << "If you wish to add to your Weekly Budget, modify the Weekly Budget first.\n";
+            } else if (remainingWeeklyBudget == 0) {
+                cout << "Warning: No Weekly Budget Remaining!" << endl;
+            } else {
+                weeklyAllocations[category] += amount;
+                remainingWeeklyBudget -= amount;
+            }
+            break;
+        case 3:
+            if (amount > remainingMonthlyBudget) {
+                cout << "Expense amount cannot exceed set Monthly Budget.\n";
+                cout << "If you wish to add to your Monthly Budget, modify the Monthly Budget first.\n";
+            } else if (remainingMonthlyBudget == 0) {
+                cout << "Warning: No Monthly Budget Remaining!" << endl;
+            } else {
+                monthlyAllocations[category] += amount;
+                remainingMonthlyBudget -= amount;
+            }
+            break;
+        default:
+            cout << "Invalid choice." << endl;
+            break;
+    }
+
+    cout << "\nPress Enter to return to the main menu...";
+    cin.ignore();
+    cin.get();
 }
 
 void addExpenseCategory(map<string, double>& dailyAllocations, map<string, double>& weeklyAllocations, map<string, double>& monthlyAllocations) {
@@ -520,57 +509,54 @@ void addExpenseCategory(map<string, double>& dailyAllocations, map<string, doubl
     cin >> category;
 
     switch (type) {
-    case 1:
-        if (dailyAllocations.find(category) == dailyAllocations.end()) {
-            dailyAllocations[category] = 0.0;
-            cout << "Category added: " << category << endl;
+        case 1:
+            if (dailyAllocations.find(category) == dailyAllocations.end()) {
+                dailyAllocations[category] = 0.0;
+                cout << "Category added: " << category << endl;
+                cout << "\nPress Enter to return to the main menu...";
+                cin.ignore();
+                cin.get();
+            } else {
+                cout << "Category already exists." << endl;
+                cout << "\nPress Enter to return to the main menu...";
+                cin.ignore();
+                cin.get();
+            }
+            break;
+        case 2:
+            if (weeklyAllocations.find(category) == weeklyAllocations.end()) {
+                weeklyAllocations[category] = 0.0;
+                cout << "Category added: " << category << endl;
+                cout << "\nPress Enter to return to the main menu...";
+                cin.ignore();
+                cin.get();
+            } else {
+                cout << "Category already exists." << endl;
+                cout << "\nPress Enter to return to the main menu...";
+                cin.ignore();
+                cin.get();
+            }
+            break;
+        case 3:
+            if (monthlyAllocations.find(category) == monthlyAllocations.end()) {
+                monthlyAllocations[category] = 0.0;
+                cout << "Category added: " << category << endl;
+                cout << "\nPress Enter to return to the main menu...";
+                cin.ignore();
+                cin.get();
+            } else {
+                cout << "Category already exists." << endl;
+                cout << "\nPress Enter to return to the main menu...";
+                cin.ignore();
+                cin.get();
+            }
+            break;
+        default:
+            cout << "Invalid expense type." << endl;
             cout << "\nPress Enter to return to the main menu...";
             cin.ignore();
             cin.get();
-        }
-        else {
-            cout << "Category already exists." << endl;
-            cout << "\nPress Enter to return to the main menu...";
-            cin.ignore();
-            cin.get();
-        }
-        break;
-    case 2:
-        if (weeklyAllocations.find(category) == weeklyAllocations.end()) {
-            weeklyAllocations[category] = 0.0;
-            cout << "Category added: " << category << endl;
-            cout << "\nPress Enter to return to the main menu...";
-            cin.ignore();
-            cin.get();
-        }
-        else {
-            cout << "Category already exists." << endl;
-            cout << "\nPress Enter to return to the main menu...";
-            cin.ignore();
-            cin.get();
-        }
-        break;
-    case 3:
-        if (monthlyAllocations.find(category) == monthlyAllocations.end()) {
-            monthlyAllocations[category] = 0.0;
-            cout << "Category added: " << category << endl;
-            cout << "\nPress Enter to return to the main menu...";
-            cin.ignore();
-            cin.get();
-        }
-        else {
-            cout << "Category already exists." << endl;
-            cout << "\nPress Enter to return to the main menu...";
-            cin.ignore();
-            cin.get();
-        }
-        break;
-    default:
-        cout << "Invalid expense type." << endl;
-        cout << "\nPress Enter to return to the main menu...";
-        cin.ignore();
-        cin.get();
-        return;
+            return;
     }
 
     saveCategories(dailyAllocations, weeklyAllocations, monthlyAllocations);
