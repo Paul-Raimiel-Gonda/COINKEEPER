@@ -50,9 +50,8 @@ void saveCategories(const map<string, double>& dailyAllocations, const map<strin
     outfile.close();
 }
 
-void displayStatus(const string& username, const string& date, double monthlyBudget, double remainingMonthlyBudget, double remainingWeeklyBudget, double remainingDailyBudget, double savings) {
+void displayStatus(const string& username, double monthlyBudget, double remainingMonthlyBudget, double remainingWeeklyBudget, double remainingDailyBudget, double savings) {
     cout << "\nUser: " << username << endl;
-    cout << "Date: " << date << endl;
     cout << "Total Budget: " << fixed << setprecision(2) << monthlyBudget << endl;
     cout << "Monthly Budget: " << fixed << setprecision(2) << remainingMonthlyBudget << endl;
     cout << "Weekly Budget: " << (remainingWeeklyBudget == -1 ? "None Set" : to_string(remainingWeeklyBudget)) << endl;
@@ -623,7 +622,6 @@ void setBudgetManually(double& monthlyBudget, double& remainingMonthlyBudget, do
 
 int main() {
     string username;
-    string date;
     double monthlyBudget = 0.0;
     double remainingMonthlyBudget = 0.0;
     double remainingWeeklyBudget = -1.0;
@@ -638,9 +636,6 @@ int main() {
 
     cout << "Enter your username: ";
     getline(cin, username);
-
-    cout << "Enter the date (YYYY-MM-DD): ";
-    getline(cin, date);
 
     cout << "Enter your total budget/income: ";
     while (!(cin >> monthlyBudget) || monthlyBudget < 0) {
@@ -671,7 +666,7 @@ int main() {
 
     int choice = 0;
     while (choice != 8) {
-        displayStatus(username, date, monthlyBudget, remainingMonthlyBudget, remainingWeeklyBudget, remainingDailyBudget, savings);
+        displayStatus(username, monthlyBudget, remainingMonthlyBudget, remainingWeeklyBudget, remainingDailyBudget, savings);
 
         // Update the table display calls
         displayTable("Daily Expense Categories", dailyAllocations, remainingDailyBudget);
