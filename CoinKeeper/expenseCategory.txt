@@ -1,2 +1,9 @@
 daily Food
+daily School-Supplies
+daily Transporation
+weekly Groceries
+weekly Laundry
+weekly Load
+monthly Bills
+monthly Rent
 monthly Wifi

@@ -1,3 +1,5 @@
+//COIN KEEPERS - DATA STRUCTURES AND ALGOTITHMS FINAL PROJECT CS1301
+
 #include <iostream>
 #include <iomanip>
 #include <string>
@@ -94,7 +96,7 @@ void displayTable(const string& title, const map<string, double>& dailyAllocatio
     auto monthlyIt = monthlyAllocations.begin();
 
     while (dailyIt != dailyAllocations.end() || weeklyIt != weeklyAllocations.end() || monthlyIt != monthlyAllocations.end()) {
-        // Daily Allocation Row
+
         if (dailyIt != dailyAllocations.end()) {
             cout << "| " << setw(16) << left << dailyIt->first << " | " << setw(10) << right << fixed << setprecision(2) << dailyIt->second << " |";
             dailyIt++;
@@ -103,7 +105,6 @@ void displayTable(const string& title, const map<string, double>& dailyAllocatio
             cout << "|                             |            |";
         }
 
-        // Weekly Allocation Row
         if (weeklyIt != weeklyAllocations.end()) {
             cout << "  | " << setw(16) << left << weeklyIt->first << " | " << setw(10) << right << fixed << setprecision(2) << weeklyIt->second << " |";
             weeklyIt++;
@@ -112,7 +113,6 @@ void displayTable(const string& title, const map<string, double>& dailyAllocatio
             cout << "  |                             |            |";
         }
 
-        // Monthly Allocation Row
         if (monthlyIt != monthlyAllocations.end()) {
             cout << "  | " << setw(16) << left << monthlyIt->first << " | " << setw(10) << right << fixed << setprecision(2) << monthlyIt->second << " |" << endl;
             monthlyIt++;
@@ -1023,7 +1023,6 @@ int main() {
     map<string, double> weeklyAllocations;
     map<string, double> monthlyAllocations;
 
-    // Load categories from file
     loadCategories(dailyAllocations, weeklyAllocations, monthlyAllocations);
 
     cout << "Enter your username: ";
@@ -1058,8 +1057,6 @@ int main() {
     int choice = 0;
     while (choice != 9) {
         displayStatus(username, monthlyBudget, remainingMonthlyBudget, remainingWeeklyBudget, remainingDailyBudget, savings);
-
-        // Update the table display calls
         displayTable("Budget Allocations:", dailyAllocations, remainingDailyBudget, weeklyAllocations, remainingWeeklyBudget, monthlyAllocations, remainingMonthlyBudget);
 
         displayMenu();
