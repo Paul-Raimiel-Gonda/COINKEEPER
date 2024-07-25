@@ -184,8 +184,8 @@ void startEndDay(double& remainingDailyBudget, double& remainingWeeklyBudget, do
 
     cout << "Enter today's budget: ";
     double newDailyBudget;
-    while (!(cin >> newDailyBudget) || newDailyBudget < 0) {
-        cout << "Invalid input. Please enter a positive number for today's budget: ";
+    while (!(cin >> newDailyBudget) || newDailyBudget < 0 || newDailyBudget > remainingWeeklyBudget) {
+        cout << "Daily Budget must be positive and within the Weekly Budget: ";
         clearInput();
     }
     remainingWeeklyBudget += remainingDailyBudget; // Restore previous daily budget to weekly budget
@@ -227,8 +227,8 @@ void startEndWeek(double& remainingWeeklyBudget, double& remainingMonthlyBudget,
 
     cout << "Enter this week's budget: ";
     double newWeeklyBudget;
-    while (!(cin >> newWeeklyBudget) || newWeeklyBudget < 0) {
-        cout << "Invalid input. Please enter a positive number for this week's budget: ";
+    while (!(cin >> newWeeklyBudget) || newWeeklyBudget < 0 || newWeeklyBudget > remainingMonthlyBudget) {
+        cout << "Weekly Budget must be positive and within the Montly Budget: ";
         clearInput();
     }
     remainingMonthlyBudget += remainingWeeklyBudget; // Restore previous weekly budget to monthly budget
@@ -320,6 +320,10 @@ void budgetManagement(double& monthlyBudget, double& remainingMonthlyBudget, dou
         remainingMonthlyBudget -= remainingWeeklyBudget;
         remainingDailyBudget = monthlyBudget / 30;
         remainingWeeklyBudget -= remainingDailyBudget;
+        cout << "\nNew Monthly Budget now set as: " << monthlyBudget << endl;
+        cout << "\nPress Enter to return to the main menu...";
+        cin.ignore();
+        cin.get();
         break;
     case 2:
         double newWeeklyBudget;
@@ -330,6 +334,18 @@ void budgetManagement(double& monthlyBudget, double& remainingMonthlyBudget, dou
         remainingMonthlyBudget -= newWeeklyBudget; // Deduct new weekly budget from monthly budget
         remainingWeeklyBudget -= remainingDailyBudget;
         remainingMonthlyBudget += remainingDailyBudget;
+        if (newWeeklyBudget > remainingMonthlyBudget) {
+            cout << "\nThe new Weekly Budget cannot exceed the remaining Monthly Budget!" << endl;
+                cout << "\nPress Enter to return to the main menu...";
+                cin.ignore();
+                cin.get();
+        }
+        else {
+            cout << "\nNew Weekly Budget now set as: " << newWeeklyBudget << endl;
+            cout << "\nPress Enter to return to the main menu...";
+            cin.ignore();
+            cin.get();
+        }
         break;
     case 3:
         double newDailyBudget;
@@ -338,6 +354,18 @@ void budgetManagement(double& monthlyBudget, double& remainingMonthlyBudget, dou
         remainingWeeklyBudget += remainingDailyBudget; // Restore previous daily budget to weekly budget
         remainingDailyBudget = newDailyBudget;
         remainingWeeklyBudget -= newDailyBudget; // Deduct new daily budget from weekly budget
+        if (newDailyBudget > remainingWeeklyBudget) {
+            cout << "\nThe new Daily Budget cannot exceed the remaining Weekly Budget!" << endl;
+                cout << "\nPress Enter to return to the main menu...";
+                cin.ignore();
+                cin.get();
+        }
+        else {
+            cout << "\nNew Daily Budget now set as: " << newWeeklyBudget << endl;
+            cout << "\nPress Enter to return to the main menu...";
+            cin.ignore();
+            cin.get();
+        }
         break;
     default:
         cout << "Invalid choice." << endl;
@@ -367,15 +395,22 @@ void expensesAllocations(double& remainingDailyBudget, double& remainingWeeklyBu
         cout << "Enter amount: ";
         cin >> amount;
 
-        if (dailyAllocations.find(category) != dailyAllocations.end()) {
+        if (amount > remainingDailyBudget) {
+            cout << "Expense amount cannot exceed set Daily Budget.\n";
+            cout << "If you wish to add to your Daily Budget, modify the Daily Budget first.\n";
+            cout << "\nPress Enter to return to the main menu...";
+            cin.ignore();
+            cin.get();
+            }
+        else if (dailyAllocations.find(category) != dailyAllocations.end()) {
             dailyAllocations[category] += amount;
             remainingDailyBudget -= amount;
-            if (remainingDailyBudget < 0) {
-                cout << "Warning: Daily budget exceeded!" << endl;
-                cout << "\nPress Enter to return to the main menu...";
-                cin.ignore();
-                cin.get();
-            }
+        }
+        else if (remainingDailyBudget = 0) {
+            cout << "Warning: No Daily Budget Remaining!" << endl;
+            cout << "\nPress Enter to return to the main menu...";
+            cin.ignore();
+            cin.get();
         }
         else {
             cout << "Category not found." << endl;
@@ -390,15 +425,22 @@ void expensesAllocations(double& remainingDailyBudget, double& remainingWeeklyBu
         cout << "Enter amount: ";
         cin >> amount;
 
-        if (weeklyAllocations.find(category) != weeklyAllocations.end()) {
+        if (amount > remainingWeeklyBudget) {
+            cout << "Expense amount cannot exceed set Weekly Budget.\n";
+            cout << "If you wish to add to your Weekly Budget, modify the Weekly Budget first.\n";
+            cout << "\nPress Enter to return to the main menu...";
+            cin.ignore();
+            cin.get();
+        }
+        else if (weeklyAllocations.find(category) != weeklyAllocations.end()) {
             weeklyAllocations[category] += amount;
             remainingWeeklyBudget -= amount;
-            if (remainingWeeklyBudget < 0) {
-                cout << "Warning: Weekly budget exceeded!" << endl;
-                cout << "\nPress Enter to return to the main menu...";
-                cin.ignore();
-                cin.get();
-            }
+        }
+        else if (remainingWeeklyBudget = 0) {
+            cout << "Warning: No Weekly Budget Remaining!" << endl;
+            cout << "\nPress Enter to return to the main menu...";
+            cin.ignore();
+            cin.get();
         }
         else {
             cout << "Category not found." << endl;
@@ -413,15 +455,22 @@ void expensesAllocations(double& remainingDailyBudget, double& remainingWeeklyBu
         cout << "Enter amount: ";
         cin >> amount;
 
-        if (monthlyAllocations.find(category) != monthlyAllocations.end()) {
+        if (amount > remainingMonthlyBudget) {
+            cout << "Expense amount cannot exceed set Monthly Budget.\n";
+            cout << "If you wish to add to your Monthly Budget, modify the Monthly Budget first.\n";
+            cout << "\nPress Enter to return to the main menu...";
+            cin.ignore();
+            cin.get();
+        }
+        else if (monthlyAllocations.find(category) != monthlyAllocations.end()) {
             monthlyAllocations[category] += amount;
             remainingMonthlyBudget -= amount;
-            if (remainingMonthlyBudget < 0) {
-                cout << "Warning: Monthly budget exceeded!" << endl;
-                cout << "\nPress Enter to return to the main menu...";
-                cin.ignore();
-                cin.get();
-            }
+        }
+        else if (remainingMonthlyBudget = 0) {
+            cout << "Warning: No Monthly Budget Remaining!" << endl;
+            cout << "\nPress Enter to return to the main menu...";
+            cin.ignore();
+            cin.get();
         }
         else {
             cout << "Category not found." << endl;
@@ -718,21 +767,21 @@ void financialAdvice(double monthlyBudget, double remainingMonthlyBudget, double
 
 
 void setBudgetManually(double& monthlyBudget, double& remainingMonthlyBudget, double& remainingWeeklyBudget, double& remainingDailyBudget) {
-    cout << "Enter your monthly budget: ";
+    cout << "Enter your total monthly budget: ";
     while (!(cin >> monthlyBudget) || monthlyBudget < 0) {
-        cout << "Invalid input. Please enter a positive number for the monthly budget: ";
+        cout << "Please enter a positive number for the monthly budget: ";
         clearInput();
     }
 
     cout << "Enter your weekly budget: ";
-    while (!(cin >> remainingWeeklyBudget) || remainingWeeklyBudget < 0) {
-        cout << "Invalid input. Please enter a positive number for the weekly budget: ";
+    while (!(cin >> remainingWeeklyBudget) || remainingWeeklyBudget < 0 || remainingWeeklyBudget > monthlyBudget) {
+        cout << "Weekly Budget must be positive and within the Monthly Budget: ";
         clearInput();
     }
 
     cout << "Enter your daily budget: ";
-    while (!(cin >> remainingDailyBudget) || remainingDailyBudget < 0) {
-        cout << "Invalid input. Please enter a positive number for the daily budget: ";
+    while (!(cin >> remainingDailyBudget) || remainingDailyBudget < 0 || remainingDailyBudget > remainingWeeklyBudget) {
+        cout << "Daily Budget must be positive and within the Weekly Budget: ";
         clearInput();
     }
 
@@ -877,12 +926,6 @@ int main() {
     cout << "Enter your username: ";
     getline(cin, username);
 
-    cout << "Enter your total budget/income: ";
-    while (!(cin >> monthlyBudget) || monthlyBudget < 0) {
-        cout << "Invalid input. Please enter a positive number for the budget: ";
-        clearInput();
-    }
-
     cout << "Choose an option for budget allocation:\n";
     cout << "1. Automate Budget Allocation\n";
     cout << "2. Set Budget Manually\n";
@@ -894,6 +937,11 @@ int main() {
     }
 
     if (allocationChoice == 1) {
+        cout << "Enter your total Monthly Budget: ";
+        while (!(cin >> monthlyBudget) || monthlyBudget < 0) {
+            cout << "Invalid input. Please enter a positive number for the budget: ";
+            clearInput();
+        }
         remainingMonthlyBudget = monthlyBudget;
         remainingWeeklyBudget = monthlyBudget / 4;
         remainingMonthlyBudget -= remainingWeeklyBudget;
