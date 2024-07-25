@@ -66,9 +66,9 @@ void displayMenu() {
     cout << "2. End/Start Week" << endl;
     cout << "3. End/Start Month" << endl;
     cout << "4. Budget Management" << endl;
-    cout << "5. Expenses/Allocations" << endl;
+    cout << "5. Allocate Expenses" << endl;
     cout << "6. Add/Remove Expense Category" << endl;
-    cout << "7. Financial Advice" << endl;
+    cout << "7. Savings" << endl;
     cout << "8. Exit" << endl;
     cout << "Enter your choice: ";
 }
