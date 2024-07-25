@@ -51,33 +51,31 @@ void saveCategories(const map<string, double>& dailyAllocations, const map<strin
 }
 
 void displayStatus(const string& username, double monthlyBudget, double remainingMonthlyBudget, double remainingWeeklyBudget, double remainingDailyBudget, double savings) {
-    cout << "                 ____      _       _  __                         " << endl;
-    cout << "                / ___|___ (_)_ __ | |/ /___  ___ _ __   ___ _ __ " << endl;
-    cout << "                | |  / _ \\| | '_ \\| ' // _ \\/ _ \\ '_ \\ / _ \\ '__| " << endl;
-    cout << "                | |__|(_) | | | | | . \\  __ / __/ |_) |  __/  | " << endl;
-    cout << "                \\____\\___/|_|_| |_|_|\\_\\___|\\___| ___/ \\___ |_| " << endl;
-    cout << "                                                |_| " << endl;
-
+    cout << "                              ____      _       _  __                         " << endl;
+    cout << "                             / ___|___ (_)_ __ | |/ /___  ___ _ __   ___ _ __ " << endl;
+    cout << "                             | |  / _ \\| | '_ \\| ' // _ \\/ _ \\ '_ \\ / _ \\ '__| " << endl;
+    cout << "                             | |__|(_) | | | | | . \\  __ / __/ |_) |  __/  | " << endl;
+    cout << "                             \\____\\___/|_|_| |_|_|\\_\\___|\\___| ___/ \\___ |_| " << endl;
+    cout << "                                                             |_| " << endl;
     cout << "\nUser: " << username << endl;
-    cout << "Total Budget: " << fixed << setprecision(2) << monthlyBudget << endl;
-    cout << "Monthly Budget: " << fixed << setprecision(2) << remainingMonthlyBudget << endl;
-    cout << "Weekly Budget: " << (remainingWeeklyBudget == -1 ? "None Set" : to_string(remainingWeeklyBudget)) << endl;
-    cout << "Daily Budget: " << (remainingDailyBudget == -1 ? "None Set" : to_string(remainingDailyBudget)) << endl;
-    cout << "Savings: " << fixed << setprecision(2) << savings << endl;
+    cout << "----------------------------------" << endl;
+    cout << "| Total Budget:       " << setw(10) << right << fixed << setprecision(2) << monthlyBudget << " |" << endl;
+    cout << "| Monthly Budget:     " << setw(10) << right << fixed << setprecision(2) << remainingMonthlyBudget << " |" << endl;
+    cout << "| Weekly Budget:      " << setw(10) << right << fixed << setprecision(2) << remainingWeeklyBudget << " |" << endl;
+    cout << "| Daily Budget:       " << setw(10) << right << fixed << setprecision(2) << remainingDailyBudget << " |" << endl;
+    cout << "| Savings:            " << setw(10) << right << fixed << setprecision(2) << savings << " |" << endl;
+    cout << "----------------------------------" << endl;
     cout << endl;
-}
+    }
 
 void displayMenu() {
-    cout << "MAIN MENU:" << endl;
-    cout << "1. End/Start Day" << endl;
-    cout << "2. End/Start Week" << endl;
-    cout << "3. End/Start Month" << endl;
-    cout << "4. Budget Management" << endl;
-    cout << "5. Expenses/Allocations" << endl;
-    cout << "6. Add/Remove Expense Category" << endl;
-    cout << "7. Savings Status/Financial Advice" << endl;
-    cout << "8. Exit" << endl;
-    cout << "Enter your choice: ";
+    cout << "\n\n-------------------------------------- M  A  I  N    M  E  N  U ---------------------------------------" << endl << endl;
+    cout << "\n        S i m u l a t e           F i n a n c e  M a n a g e r        F i n a n c e  A d v i s o r" << endl;
+    cout << "        1. End/Start Day          4. Budget Management                7. Financial Advice" << endl;
+    cout << "        2. End/Start Week         5. Expenses/Allocations             8. Modify Savings" << endl;
+    cout << "        3. End/Start Month        6. Add/Remove Expense Category" << endl;
+    cout << "\n                                               9. Exit" << endl;
+    cout << "\n                                          Enter your choice: ";
 }
 
 void displayTable(const string& title, const map<string, double>& dailyAllocations, double remainingDailyBudget,
