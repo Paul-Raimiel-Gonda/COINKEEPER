@@ -4,6 +4,7 @@
 #include <map>
 #include <fstream>
 #include <limits>
+#include <numeric>
 
 using namespace std;
 
@@ -73,25 +74,52 @@ void displayMenu() {
     cout << "Enter your choice: ";
 }
 
-void displayTable(const string& title, const map<string, double>& allocations, double remainingBudget) {
-    cout << "\n" << title << endl;
-    cout << "|-------------------------------|" << endl;
-    cout << "|     Category     |  Amount    |" << endl;
-    cout << "|-------------------------------|" << endl;
+void displayTable(const string& title1, const map<string, double>& allocations1, double remainingBudget1,
+    const string& title2, const map<string, double>& allocations2, double remainingBudget2,
+    const string& title3, const map<string, double>& allocations3, double remainingBudget3) {
+    cout << "\n" << setw(35) << left << title1 << setw(35) << left << title2 << title3 << endl;
+    cout << setw(35) << left << "|-------------------------------|" << setw(35) << left << "|-------------------------------|" << "|-------------------------------|" << endl;
+    cout << setw(35) << left << "|     Category     |  Amount    |" << setw(35) << left << "|     Category     |  Amount    |" << "|     Category     |  Amount    |" << endl;
+    cout << setw(35) << left << "|-------------------------------|" << setw(35) << left << "|-------------------------------|" << "|-------------------------------|" << endl;
 
-    double totalExpenses = 0.0;
+    auto it1 = allocations1.begin(), it2 = allocations2.begin(), it3 = allocations3.begin();
+    while (it1 != allocations1.end() || it2 != allocations2.end() || it3 != allocations3.end()) {
+        if (it1 != allocations1.end()) {
+            cout << "| " << setw(16) << left << it1->first << " | " << setw(10) << right << fixed << setprecision(2) << it1->second << " |";
+            ++it1;
+        }
+        else {
+            cout << setw(35) << left << "|                               |";
+        }
 
-    for (const auto& alloc : allocations) {
-        cout << "| " << setw(16) << left << alloc.first << " | " << setw(10) << right << fixed << setprecision(2) << alloc.second << " |" << endl;
-        totalExpenses += alloc.second;
+        if (it2 != allocations2.end()) {
+            cout << "| " << setw(16) << left << it2->first << " | " << setw(10) << right << fixed << setprecision(2) << it2->second << " |";
+            ++it2;
+        }
+        else {
+            cout << setw(35) << left << "|                               |";
+        }
+
+        if (it3 != allocations3.end()) {
+            cout << "| " << setw(16) << left << it3->first << " | " << setw(10) << right << fixed << setprecision(2) << it3->second << " |" << endl;
+            ++it3;
+        }
+        else {
+            cout << "|                               |" << endl;
+        }
     }
 
-    cout << "|-------------------------------|" << endl;
-    cout << "| Total Expenses   | " << setw(10) << right << fixed << setprecision(2) << totalExpenses << " |" << endl;
-    cout << "| Remaining Budget | " << setw(10) << right << fixed << setprecision(2) << remainingBudget << " |" << endl;
-    cout << "|-------------------------------|" << endl << endl;
-}
+    cout << setw(35) << left << "|-------------------------------|" << setw(35) << left << "|-------------------------------|" << "|-------------------------------|" << endl;
+    cout << "| Total Expenses   | " << setw(10) << right << fixed << setprecision(2) << accumulate(allocations1.begin(), allocations1.end(), 0.0, [](double sum, const pair<string, double>& p) { return sum + p.second; }) << " |";
+    cout << setw(35) << left << "| Total Expenses   | " << setw(10) << right << fixed << setprecision(2) << accumulate(allocations2.begin(), allocations2.end(), 0.0, [](double sum, const pair<string, double>& p) { return sum + p.second; }) << " |";
+    cout << "| Total Expenses   | " << setw(10) << right << fixed << setprecision(2) << accumulate(allocations3.begin(), allocations3.end(), 0.0, [](double sum, const pair<string, double>& p) { return sum + p.second; }) << " |" << endl;
 
+    cout << "| Remaining Budget | " << setw(10) << right << fixed << setprecision(2) << remainingBudget1 << " |";
+    cout << setw(35) << left << "| Remaining Budget | " << setw(10) << right << fixed << setprecision(2) << remainingBudget2 << " |";
+    cout << "| Remaining Budget | " << setw(10) << right << fixed << setprecision(2) << remainingBudget3 << " |" << endl;
+
+    cout << setw(35) << left << "|-------------------------------|" << setw(35) << left << "|-------------------------------|" << "|-------------------------------|" << endl;
+}
 void clearInput() {
     cin.clear();
     cin.ignore(numeric_limits<streamsize>::max(), '\n');
@@ -664,14 +692,28 @@ int main() {
         setBudgetManually(monthlyBudget, remainingMonthlyBudget, remainingWeeklyBudget, remainingDailyBudget);
     }
 
+    // Update the remaining budgets and allocations as needed
+    // For example, you can calculate remaining budgets based on some logic or user input
+
+    double remainingBudget1 = remainingDailyBudget;
+    double remainingBudget2 = remainingWeeklyBudget;
+    double remainingBudget3 = remainingMonthlyBudget;
+
+    // Ensure to initialize these allocations with actual data
+    map<string, double> allocations1 = dailyAllocations;
+    map<string, double> allocations2 = weeklyAllocations;
+    map<string, double> allocations3 = monthlyAllocations;
+
     int choice = 0;
     while (choice != 8) {
         displayStatus(username, monthlyBudget, remainingMonthlyBudget, remainingWeeklyBudget, remainingDailyBudget, savings);
 
         // Update the table display calls
-        displayTable("Daily Expense Categories", dailyAllocations, remainingDailyBudget);
-        displayTable("Weekly Expense Categories", weeklyAllocations, remainingWeeklyBudget);
-        displayTable("Monthly Expense Categories", monthlyAllocations, remainingMonthlyBudget);
+        displayTable(
+            "Daily Budget Allocations", allocations1, remainingBudget1,
+            "Weekly Budget Allocations", allocations2, remainingBudget2,
+            "Monthly Budget Allocations", allocations3, remainingBudget3
+        );
 
         displayMenu();
         while (!(cin >> choice) || choice < 1 || choice > 8) {
