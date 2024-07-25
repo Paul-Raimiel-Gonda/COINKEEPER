@@ -177,7 +177,7 @@ void startEndDay(double& remainingDailyBudget, double& remainingWeeklyBudget, do
         }
     }
 
-    remainingDailyBudget = -1.0;
+    remainingDailyBudget = 0.0;
     for (auto& alloc : dailyAllocations) {
         alloc.second = 0.0;
     }
@@ -220,7 +220,7 @@ void startEndWeek(double& remainingWeeklyBudget, double& remainingMonthlyBudget,
         }
     }
 
-    remainingWeeklyBudget = -1.0;
+    remainingWeeklyBudget = 0.0;
     for (auto& alloc : weeklyAllocations) {
         alloc.second = 0.0;
     }
@@ -786,10 +786,8 @@ void setBudgetManually(double& monthlyBudget, double& remainingMonthlyBudget, do
     }
 
     remainingMonthlyBudget = monthlyBudget;
-    remainingWeeklyBudget = remainingWeeklyBudget;
-    remainingDailyBudget = remainingDailyBudget;
-    remainingMonthlyBudget -= remainingWeeklyBudget; // Deduct weekly budget from monthly
-    remainingWeeklyBudget -= remainingDailyBudget; // Deduct daily budget from weekly
+    remainingMonthlyBudget -= remainingWeeklyBudget;
+    remainingWeeklyBudget -= remainingDailyBudget;
 }
 
 void modifySavings(double& remainingDailyBudget, double& remainingWeeklyBudget, double& remainingMonthlyBudget, double& savings) {
@@ -913,8 +911,8 @@ int main() {
     string username;
     double monthlyBudget = 0.0;
     double remainingMonthlyBudget = 0.0;
-    double remainingWeeklyBudget = -1.0;
-    double remainingDailyBudget = -1.0;
+    double remainingWeeklyBudget = 0.0;
+    double remainingDailyBudget = 0.0;
     double savings = 0.0;
     map<string, double> dailyAllocations;
     map<string, double> weeklyAllocations;
