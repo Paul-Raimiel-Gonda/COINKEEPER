@@ -86,7 +86,7 @@ void displayTable(const string& title, const map<string, double>& dailyAllocatio
     const map<string, double>& monthlyAllocations, double remainingMonthlyBudget) {
     cout << title << endl;
 
-    cout << "Daily Budget Allocations           Weekly Budget Allocations          Monthly Budget Allocations" << endl;
+    cout << "\n    Daily Budget Allocations           Weekly Budget Allocations          Monthly Budget Allocations" << endl;
     cout << "|-------------------------------|  |-------------------------------|  |-------------------------------|" << endl;
     cout << "|     Category     |  Amount    |  |     Category     |  Amount    |  |     Category     |  Amount    |" << endl;
     cout << "|-------------------------------|  |-------------------------------|  |-------------------------------|" << endl;
