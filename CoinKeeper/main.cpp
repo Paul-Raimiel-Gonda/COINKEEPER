@@ -197,14 +197,20 @@ void startEndDay(double& remainingDailyBudget, double& remainingWeeklyBudget, do
     cin.get();
 }
 
-void startEndWeek(double& remainingWeeklyBudget, double& remainingMonthlyBudget, double& savings, map<string, double>& weeklyAllocations) {
+void startEndWeek(double& remainingDailyBudget, double& remainingWeeklyBudget, double& remainingMonthlyBudget, double& savings, map<string, double>& weeklyAllocations) {
     double totalAllocations = 0.0;
 
     for (const auto& alloc : weeklyAllocations) {
         totalAllocations += alloc.second;
     }
 
-    if (remainingWeeklyBudget > 0) {
+    if (remainingDailyBudget > 0) {
+        cout << "Remaining Daily Budget: " << remainingDailyBudget << endl;
+        cout << "Remaining Daily Budget added to Remaining Weekly Budget." << endl;
+        remainingWeeklyBudget += remainingDailyBudget;
+        remainingDailyBudget = 0.0;
+    }
+    if (remainingWeeklyBudget > 0 || remainingWeeklyBudget > 0) {
         char choice;
         cout << "Week ended. Remaining weekly budget: " << remainingWeeklyBudget << endl;
         cout << "Do you want to add the remaining weekly budget to savings or return it to the monthly budget? (s/r): ";
@@ -247,6 +253,18 @@ void startEndMonth(double& monthlyBudget, double& remainingMonthlyBudget, double
         totalAllocations += alloc.second;
     }
 
+    if (remainingDailyBudget > 0) {
+        cout << "Remaining Daily Budget: " << remainingDailyBudget << endl;
+        cout << "Remaining Daily Budget added to Remaining Monthly Budget." << endl;
+        remainingMonthlyBudget += remainingDailyBudget;
+        remainingDailyBudget = 0.0;
+    }
+    if (remainingWeeklyBudget > 0) {
+        cout << "Remaining Weekly Budget: " << remainingDailyBudget << endl;
+        cout << "Remaining Weekly Budget added to Remaining Monthly Budget." << endl;
+        remainingMonthlyBudget += remainingWeeklyBudget;
+        remainingWeeklyBudget = 0.0;
+    }
     if (remainingMonthlyBudget > 0) {
         char choice;
         cout << "Month ended. Remaining monthly budget: " << remainingMonthlyBudget << endl;
@@ -329,11 +347,10 @@ void budgetManagement(double& monthlyBudget, double& remainingMonthlyBudget, dou
         double newWeeklyBudget;
         cout << "Enter new weekly budget: ";
         cin >> newWeeklyBudget;
-        remainingMonthlyBudget += remainingWeeklyBudget; // Restore previous weekly budget to monthly budget
+        remainingMonthlyBudget += remainingWeeklyBudget + remainingDailyBudget; // Restore previous weekly budget to monthly budget
         remainingWeeklyBudget = newWeeklyBudget;
         remainingMonthlyBudget -= newWeeklyBudget; // Deduct new weekly budget from monthly budget
         remainingWeeklyBudget -= remainingDailyBudget;
-        remainingMonthlyBudget += remainingDailyBudget;
         if (newWeeklyBudget > remainingMonthlyBudget) {
             cout << "\nThe new Weekly Budget cannot exceed the remaining Monthly Budget!" << endl;
                 cout << "\nPress Enter to return to the main menu...";
@@ -361,7 +378,7 @@ void budgetManagement(double& monthlyBudget, double& remainingMonthlyBudget, dou
                 cin.get();
         }
         else {
-            cout << "\nNew Daily Budget now set as: " << newWeeklyBudget << endl;
+            cout << "\nNew Daily Budget now set as: " << newDailyBudget << endl;
             cout << "\nPress Enter to return to the main menu...";
             cin.ignore();
             cin.get();
@@ -967,7 +984,7 @@ int main() {
             startEndDay(remainingDailyBudget, remainingWeeklyBudget, remainingMonthlyBudget, savings, dailyAllocations);
             break;
         case 2:
-            startEndWeek(remainingWeeklyBudget, remainingMonthlyBudget, savings, weeklyAllocations);
+            startEndWeek(remainingDailyBudget, remainingWeeklyBudget, remainingMonthlyBudget, savings, weeklyAllocations);
             break;
         case 3:
             startEndMonth(monthlyBudget, remainingMonthlyBudget, remainingWeeklyBudget, remainingDailyBudget, savings, dailyAllocations, weeklyAllocations, monthlyAllocations);
