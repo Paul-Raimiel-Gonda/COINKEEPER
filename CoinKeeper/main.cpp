@@ -195,9 +195,9 @@ void startEndDay(double& remainingDailyBudget, double& remainingWeeklyBudget, do
         cout << "Daily Budget must be positive and within the Weekly Budget: ";
         clearInput();
     }
-    remainingWeeklyBudget += remainingDailyBudget; // Restore previous daily budget to weekly budget
+    remainingWeeklyBudget += remainingDailyBudget;
     remainingDailyBudget = newDailyBudget;
-    remainingWeeklyBudget -= newDailyBudget; // Deduct new daily budget from weekly budget
+    remainingWeeklyBudget -= newDailyBudget;
     cout << "New day started with budget: " << remainingDailyBudget << endl;
     cout << "\nPress Enter to return to the main menu...\n";
     cin.ignore();
@@ -254,9 +254,9 @@ void startEndWeek(double& remainingDailyBudget, double& remainingWeeklyBudget, d
         cout << "Weekly Budget must be positive and within the Monthly Budget: ";
         clearInput();
     }
-    remainingMonthlyBudget += remainingWeeklyBudget; // Restore previous weekly budget to monthly budget
+    remainingMonthlyBudget += remainingWeeklyBudget;
     remainingWeeklyBudget = newWeeklyBudget;
-    remainingMonthlyBudget -= newWeeklyBudget; // Deduct new weekly budget from monthly budget
+    remainingMonthlyBudget -= newWeeklyBudget;
 
     cout << "Enter new Daily Budget: ";
     double newDailyBudget;
@@ -264,9 +264,9 @@ void startEndWeek(double& remainingDailyBudget, double& remainingWeeklyBudget, d
         cout << "Daily Budget must be positive and within the Weekly Budget: ";
         clearInput();
     }
-    remainingWeeklyBudget += remainingDailyBudget; // Restore previous daily budget to weekly budget
+    remainingWeeklyBudget += remainingDailyBudget;
     remainingDailyBudget = newDailyBudget;
-    remainingWeeklyBudget -= newDailyBudget; // Deduct new daily budget from weekly budget
+    remainingWeeklyBudget -= newDailyBudget;
     cout << "New week started with New Weekly Budget: " << remainingWeeklyBudget << endl;
     cout << "New Daily Budget: " << remainingDailyBudget << endl;
     cout << "\nPress Enter to return to the main menu...";
@@ -342,7 +342,7 @@ void startEndMonth(double& monthlyBudget, double& remainingMonthlyBudget, double
         if (addSavingsToBudget == 'y' || addSavingsToBudget == 'Y') {
             cout << "Adding savings to the new monthly budget." << endl;
             newMonthlyBudget += savings;
-            savings = 0.0; // Reset savings after adding to budget
+            savings = 0.0;
             cout << "New Monthly Budget: " << newMonthlyBudget << endl;
         }
         else {
@@ -373,7 +373,7 @@ void startEndMonth(double& monthlyBudget, double& remainingMonthlyBudget, double
         if (addSavingsToBudget == 'y' || addSavingsToBudget == 'Y') {
             cout << "Adding savings to the new monthly budget." << endl;
             newMonthlyBudget += savings;
-            savings = 0.0; // Reset savings after adding to budget
+            savings = 0.0;
             cout << "New Monthly Budget: " << newMonthlyBudget << endl;
         }
         else {
@@ -438,9 +438,9 @@ void budgetManagement(double& monthlyBudget, double& remainingMonthlyBudget, dou
         double newWeeklyBudget;
         cout << "Enter new weekly budget: ";
         cin >> newWeeklyBudget;
-        remainingMonthlyBudget += remainingWeeklyBudget + remainingDailyBudget; // Restore previous weekly budget to monthly budget
+        remainingMonthlyBudget += remainingWeeklyBudget + remainingDailyBudget;
         remainingWeeklyBudget = newWeeklyBudget;
-        remainingMonthlyBudget -= newWeeklyBudget; // Deduct new weekly budget from monthly budget
+        remainingMonthlyBudget -= newWeeklyBudget;
         remainingWeeklyBudget -= remainingDailyBudget;
         if (newWeeklyBudget > remainingMonthlyBudget) {
             cout << "\nThe new Weekly Budget cannot exceed the remaining Monthly Budget!" << endl;
@@ -459,9 +459,9 @@ void budgetManagement(double& monthlyBudget, double& remainingMonthlyBudget, dou
         double newDailyBudget;
         cout << "Enter new daily budget: ";
         cin >> newDailyBudget;
-        remainingWeeklyBudget += remainingDailyBudget; // Restore previous daily budget to weekly budget
+        remainingWeeklyBudget += remainingDailyBudget;
         remainingDailyBudget = newDailyBudget;
-        remainingWeeklyBudget -= newDailyBudget; // Deduct new daily budget from weekly budget
+        remainingWeeklyBudget -= newDailyBudget;
         if (newDailyBudget > remainingWeeklyBudget) {
             cout << "\nThe new Daily Budget cannot exceed the remaining Weekly Budget!" << endl;
             cout << "\nPress Enter to return to the main menu...";
