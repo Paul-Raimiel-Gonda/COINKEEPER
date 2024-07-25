@@ -165,14 +165,20 @@ void startEndDay(double& remainingDailyBudget, double& remainingWeeklyBudget, do
     if (remainingDailyBudget > 0) {
         char choice;
         cout << "Day ended. Remaining daily budget: " << remainingDailyBudget << endl;
-        cout << "Do you want to add the remaining daily budget to savings or return it to the weekly budget? (s/r): ";
-        cin >> choice;
+        do {
+            cout << "Do you want to add the remaining daily budget to savings or return it to the weekly budget? (s/r): ";
+            cin >> choice;
+            if (choice != 's' && choice != 'S' && choice != 'r' && choice != 'R') {
+                cout << "Invalid input. Please enter 's' or 'r'." << endl;
+                clearInput();
+            }
+        } while (choice != 's' && choice != 'S' && choice != 'r' && choice != 'R');
 
         if (choice == 's' || choice == 'S') {
             savings += remainingDailyBudget;
             cout << "Added to savings." << endl;
         }
-        else if (choice == 'r' || choice == 'R') {
+        else {
             remainingWeeklyBudget += remainingDailyBudget;
             cout << "Returned to weekly budget." << endl;
         }
@@ -211,17 +217,23 @@ void startEndWeek(double& remainingDailyBudget, double& remainingWeeklyBudget, d
         remainingWeeklyBudget += remainingDailyBudget;
         remainingDailyBudget = 0.0;
     }
-    if (remainingWeeklyBudget > 0 || remainingWeeklyBudget > 0) {
+    if (remainingWeeklyBudget > 0) {
         char choice;
         cout << "Week ended. Remaining weekly budget: " << remainingWeeklyBudget << endl;
-        cout << "Do you want to add the remaining weekly budget to savings or return it to the monthly budget? (s/r): ";
-        cin >> choice;
+        do {
+            cout << "Do you want to add the remaining weekly budget to savings or return it to the monthly budget? (s/r): ";
+            cin >> choice;
+            if (choice != 's' && choice != 'S' && choice != 'r' && choice != 'R') {
+                cout << "Invalid input. Please enter 's' or 'r'." << endl;
+                clearInput();
+            }
+        } while (choice != 's' && choice != 'S' && choice != 'r' && choice != 'R');
 
         if (choice == 's' || choice == 'S') {
             savings += remainingWeeklyBudget;
             cout << "Added to savings." << endl;
         }
-        else if (choice == 'r' || choice == 'R') {
+        else {
             remainingMonthlyBudget += remainingWeeklyBudget;
             cout << "Returned to monthly budget." << endl;
         }
@@ -239,14 +251,14 @@ void startEndWeek(double& remainingDailyBudget, double& remainingWeeklyBudget, d
     cout << "Enter new Weekly budget: ";
     double newWeeklyBudget;
     while (!(cin >> newWeeklyBudget) || newWeeklyBudget < 0 || newWeeklyBudget > remainingMonthlyBudget) {
-        cout << "Weekly Budget must be positive and within the Montly Budget: ";
+        cout << "Weekly Budget must be positive and within the Monthly Budget: ";
         clearInput();
     }
     remainingMonthlyBudget += remainingWeeklyBudget; // Restore previous weekly budget to monthly budget
     remainingWeeklyBudget = newWeeklyBudget;
     remainingMonthlyBudget -= newWeeklyBudget; // Deduct new weekly budget from monthly budget
 
-    cout << "Enter new Daily Budget budget: ";
+    cout << "Enter new Daily Budget: ";
     double newDailyBudget;
     while (!(cin >> newDailyBudget) || newDailyBudget < 0 || newDailyBudget > remainingWeeklyBudget) {
         cout << "Daily Budget must be positive and within the Weekly Budget: ";
